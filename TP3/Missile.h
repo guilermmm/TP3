@@ -23,6 +23,8 @@ class Missile : public Object
     Vector &Speed();
     void Update();
     void Draw();
+
+    void OnCollision(Object* obj);
 };
 
 inline Vector &Missile::Speed()

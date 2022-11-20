@@ -41,3 +41,12 @@ void Missile::Update()
         GeoWars::scene->Delete();
     }
 }
+
+void Missile::OnCollision(Object* obj)
+{
+    if (obj->Type() == ENEMY)
+    {
+        GeoWars::scene->Delete(this, STATIC);
+
+    }
+}

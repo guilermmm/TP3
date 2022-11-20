@@ -17,7 +17,11 @@ enum ObjectIds
     GREEN,
     MAGENTA,
     ORANGE,
-    WALLHIT
+    WALLHIT,
+
+
+    ENEMY,
+    EXPLOSION,
 };
 
 enum SoundIds

@@ -2,8 +2,7 @@
 #include "Blue.h"
 #include "Delay.h"
 #include "Engine.h"
-#include "Green.h"
-#include "Magenta.h"
+#include "Mothership.h"
 #include "Orange.h"
 #include "Resources.h"
 
@@ -36,12 +35,10 @@ void GeoWars::Init()
 
     hud = new Hud();
 
-    scene->Add(player, STATIC);
-    scene->Add(new Magenta(player), STATIC);
-    scene->Add(new Blue(player), STATIC);
-    scene->Add(new Green(player), STATIC);
-    scene->Add(new Orange(player), STATIC);
-    scene->Add(new Delay(), STATIC);
+    scene->Add(player, MOVING);
+    scene->Add(new Mothership(player), MOVING);
+    scene->Add(new Blue(player), MOVING);
+    scene->Add(new Orange(player), MOVING);
 
     float difx = (game->Width() - window->Width()) / 2.0f;
     float dify = (game->Height() - window->Height()) / 2.0f;

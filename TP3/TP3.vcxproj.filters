@@ -93,12 +93,6 @@
     <ClCompile Include="Blue.cpp">
       <Filter>Game\Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="Green.cpp">
-      <Filter>Game\Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Magenta.cpp">
-      <Filter>Game\Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="Missile.cpp">
       <Filter>Game\Arquivos de Origem</Filter>
     </ClCompile>
@@ -109,9 +103,6 @@
       <Filter>Engine\Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="GeoWars.cpp">
-      <Filter>Game\Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="Delay.cpp">
       <Filter>Game\Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="Hud.cpp">
@@ -127,6 +118,15 @@
       <Filter>Game\Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="Cooldown.cpp">
+      <Filter>Game\Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Mothership.cpp">
+      <Filter>Game\Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Kamikaze.cpp">
+      <Filter>Game\Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
       <Filter>Game\Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -203,12 +203,6 @@
     <ClInclude Include="Blue.h">
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="Green.h">
-      <Filter>Game\Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Magenta.h">
-      <Filter>Game\Arquivos de Cabeçalho</Filter>
-    </ClInclude>
     <ClInclude Include="Missile.h">
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
@@ -237,6 +231,15 @@
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="Cooldown.h">
+      <Filter>Game\Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Kamikaze.h">
+      <Filter>Game\Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Mothership.h">
+      <Filter>Game\Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>

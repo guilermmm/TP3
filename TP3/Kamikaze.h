@@ -1,16 +1,16 @@
 /**********************************************************************************
-// Green (Arquivo de Cabeçalho)
+// Magenta (Arquivo de Cabeï¿½alho)
 // 
-// Criação:     15 Out 2012
-// Atualização: 01 Nov 2021
+// Criaï¿½ï¿½o:     10 Out 2012
+// Atualizaï¿½ï¿½o: 01 Nov 2021
 // Compilador:  Visual C++ 2019
 //
-// Descrição:   Objeto faz uma fuga suavizada
+// Descriï¿½ï¿½o:   Objeto faz um perseguiï¿½ï¿½o direta
 //
 **********************************************************************************/
 
-#ifndef _GEOWARS_GREEN_H_
-#define _GEOWARS_GREEN_H_
+#ifndef _GEOWARS_KAMIKAZE_H_
+#define _GEOWARS_KAMIKAZE_H_
 
 // ---------------------------------------------------------------------------------
 
@@ -22,26 +22,26 @@
 
 // ---------------------------------------------------------------------------------
 
-class Green : public Object
+class Kamikaze : public Object
 {
 private:
     Sprite * sprite;                    // sprite do objeto
-    Vector * speed;                     // velocidade e direção
+    Vector * speed;                     // velocidade e direï¿½ï¿½o
     Player * player;                    // ponteiro para jogador
-    int distance;                       // mantém distância do jogador
+    float factor;
     
 public:
-    Green(Player * p);                  // construtor
-    ~Green();                           // destrutor
+    Kamikaze(float pX, float pY);                // construtor
+    ~Kamikaze();                         // destrutor
     
-    void OnCollision(Object* obj);      // resolução da colisão
-    void Update();                      // atualização
+    void OnCollision(Object * obj);     // resoluï¿½ï¿½o da colisï¿½o
+    void Update();                      // atualizaï¿½ï¿½o
     void Draw();                        // desenho
 }; 
 
 // ---------------------------------------------------------------------------------
 
-inline void Green::Draw()
+inline void Kamikaze::Draw()
 { sprite->Draw(x, y, Layer::LOWER, scale, rotation); }
 
 // ---------------------------------------------------------------------------------
