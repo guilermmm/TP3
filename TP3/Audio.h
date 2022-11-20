@@ -27,19 +27,19 @@ using std::string;
 class Audio
 {
 private:
-    IXAudio2* audioEngine;                                  // sistema de áudio (engine)
-    IXAudio2MasteringVoice* masterVoice;                    // dispositivo principal de áudio
-    unordered_map<uint, Sound*> soundTable;                 // coleção de sons
+    IXAudio2* audioEngine;                                        // sistema de áudio (engine)
+    IXAudio2MasteringVoice* masterVoice;                          // dispositivo principal de áudio
+    unordered_map<uint, Sound*> soundTable;                       // coleção de sons
 
 public:
-    Audio();                                                // construtor
-    ~Audio();                                               // destrutor
+    Audio();                                                      // construtor
+    ~Audio();                                                     // destrutor
 
-    void Add(uint id, string filename, uint nVoices = 1);   // adiciona arquivo a coleção de sons
-    void Play(uint id, bool repeat = false);                // inicia a reprodução do som
-    void Stop(uint id);                                     // para a reprodução do som
-    void Volume(uint id, float level);                      // ajusta volume do som
-    void Frequency(uint id, float level);                   // ajusta a frequência do som
+    void Add(uint id, string filename, uint nVoices = 1);         // adiciona arquivo a coleção de sons
+    void Play(uint id, float volume = 0.0f, bool repeat = false); // inicia a reprodução do som
+    void Stop(uint id);                                           // para a reprodução do som
+    void Volume(uint id, float level);                            // ajusta volume do som
+    void Frequency(uint id, float level);                         // ajusta a frequência do som
 }; 
 
 // ---------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 #include "Missile.h"
 #include "GeoWars.h"
+#include "Util.h"
 #include "WallHit.h"
 
 Player *&Missile::player = GeoWars::player;
@@ -30,23 +31,16 @@ void Missile::Update()
 
     if (x > game->Width() - 50 || x < 50 || y > game->Height() - 50 || y < 50)
     {
-
-        float distance = Point::Distance(Point(x, y), Point(player->X(), player->Y()));
-        float level = (MaxDistance - distance) / MaxDistance * BaseVolume;
-        GeoWars::audio->Volume(HITWALL, level);
-        GeoWars::audio->Play(HITWALL);
-
+        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
         GeoWars::scene->Add(new WallHit(x, y), STATIC);
-
         GeoWars::scene->Delete();
     }
 }
 
-void Missile::OnCollision(Object* obj)
+void Missile::OnCollision(Object *obj)
 {
     if (obj->Type() == ENEMY)
     {
         GeoWars::scene->Delete(this, STATIC);
-
     }
 }

@@ -73,7 +73,7 @@ void Audio::Add(uint id, string filename, uint nVoices)
 
 // ---------------------------------------------------------------------------------
 
-void Audio::Play(uint id, bool repeat)
+void Audio::Play(uint id, float volume, bool repeat)
 { 
     // recupera som da tabela
     Sound * selected = soundTable[id];
@@ -87,7 +87,7 @@ void Audio::Play(uint id, bool repeat)
     // limpa voz corrente e inicia reprodução do som
     selected->voices[selected->index]->Stop();
     selected->voices[selected->index]->FlushSourceBuffers();
-    selected->voices[selected->index]->SetVolume(selected->volume);
+    selected->voices[selected->index]->SetVolume(volume != 0.0f ? volume : selected->volume);
     selected->voices[selected->index]->SubmitSourceBuffer(&selected->buffer);
     selected->voices[selected->index]->Start();
 
