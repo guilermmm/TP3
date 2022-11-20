@@ -44,6 +44,8 @@ void Player::Move(Vector &&v)
 
     if (speed->Magnitude() > 10.0f)
         speed->ScaleTo(10.0f);
+
+    weaponAngle = speed->Angle();
 }
 
 void Player::Update()
