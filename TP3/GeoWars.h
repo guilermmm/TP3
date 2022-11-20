@@ -1,55 +1,54 @@
-/**********************************************************************************
-// GeoWars (Arquivo de Cabeçalho)
-// 
-// Criação:     23 Out 2012
-// Atualização: 01 Nov 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Demonstração da versão final do motor
-//
-**********************************************************************************/
-
 #ifndef _GEOWARS_H_
 #define _GEOWARS_H_
 
-// ------------------------------------------------------------------------------
-
-#include "Game.h"
 #include "Audio.h"
-#include "Scene.h"
 #include "Background.h"
-#include "Player.h"
+#include "Controller.h"
+#include "Game.h"
 #include "Hud.h"
+#include "Player.h"
+#include "Scene.h"
 
-// ------------------------------------------------------------------------------
+enum ObjectIds
+{
+    PLAYER,
+    MISSILE,
+    BLUE,
+    GREEN,
+    MAGENTA,
+    ORANGE,
+    WALLHIT
+};
 
-enum ObjectIds { PLAYER, MISSILE, BLUE, GREEN, MAGENTA, ORANGE, WALLHIT };
-
-// ------------------------------------------------------------------------------
-
-enum SoundIds { THEME, START, FIRE, EXPLODE, HITWALL };
-
-// ------------------------------------------------------------------------------
+enum SoundIds
+{
+    THEME,
+    START,
+    FIRE,
+    EXPLODE,
+    HITWALL
+};
 
 class GeoWars : public Game
 {
-private:
-    Background * backg = nullptr;   // pano de fundo
-    Hud * hud = nullptr;            // painel de informações
-    bool viewBBox = false;          // visualização das bouding boxes
+  private:
+    Background *backg = nullptr;
+    Hud *hud = nullptr;
+    bool viewBBox = false;
 
-public:
-    static Player * player;         // nave controlada pela jogador
-    static Audio * audio;           // sitema de áudio
-    static Scene * scene;           // cena do jogo
-    static bool viewHUD;            // visualização do painel
+  public:
+    static Player *player;
+    static Audio *audio;
+    static Scene *scene;
+    static bool viewHUD;
+    static Controller *gamepad;
+    static bool gamepadOn;
+    static uint xboxPlayer;
 
-    void Init();                    // inicialização
-    void Update();                  // atualização
-    void Draw();                    // desenho
-    void Finalize();                // finalização
+    void Init();
+    void Update();
+    void Draw();
+    void Finalize();
 };
-
-// ---------------------------------------------------------------------------------
 
 #endif

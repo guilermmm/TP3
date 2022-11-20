@@ -1,77 +1,55 @@
-/**********************************************************************************
-// Player (Código Fonte)
-// 
-// Criação:     10 Out 2012
-// Atualização: 01 Nov 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Define a classe jogador
-//
-**********************************************************************************/
 
-#include "Player.h" 
-#include "Missile.h"
+#include "Player.h"
 #include "GeoWars.h"
-
-// -------------------------------------------------------------------------------
+#include "Missile.h"
+#include "Util.h"
 
 Player::Player()
 {
-    // configuração do objeto
-    sprite = new Sprite("Resources/Player.png");
-    speed  = new Vector(90.0f, 0.0f);
+    sprite = new Sprite("Resources/WIP/Player.png");
+    basicWeapon = new Sprite("Resources/WIP/Weapon_Basic.png");
+    speed = new Vector(90.0f, 0.0f);
+    weaponAngle = 90.0f;
     BBox(new Circle(18.0f));
     MoveTo(game->CenterX(), game->CenterY());
     type = PLAYER;
 
-    // configuração do gerador de partículas
     Generator emitter;
-    emitter.imgFile = "Resources/Spark.png";    // arquivo de imagem
-    emitter.angle = 270.0f;                     // ângulo base do emissor
-    emitter.spread = 50;                        // espalhamento em graus
-    emitter.lifetime = 0.3f;                    // tempo de vida em segundos
-    emitter.frequency = 0.010f;                 // tempo entre geração de novas partículas
-    emitter.percentToDim = 0.6f;                // desaparece após 60% da vida
-    emitter.minSpeed = 50.0f;                   // velocidade mínima das partículas
-    emitter.maxSpeed = 100.0f;                  // velocidade máxima das partículas
-    emitter.color.r = 1.0f;                     // componente Red da partícula 
-    emitter.color.g = 1.0f;                     // componente Green da partícula 
-    emitter.color.b = 1.0f;                     // componente Blue da partícula 
-    emitter.color.a = 1.0f;                     // transparência da partícula
+    emitter.imgFile = "Resources/Spark.png";
+    emitter.angle = 270.0f;
+    emitter.spread = 50;
+    emitter.lifetime = 0.3f;
+    emitter.frequency = 0.010f;
+    emitter.percentToDim = 0.6f;
+    emitter.minSpeed = 50.0f;
+    emitter.maxSpeed = 100.0f;
+    emitter.color.r = 1.0f;
+    emitter.color.g = 1.0f;
+    emitter.color.b = 1.0f;
+    emitter.color.a = 1.0f;
 
-    // cria sistema de partículas
     tail = new Particles(emitter);
 }
-
-// -------------------------------------------------------------------------------
 
 Player::~Player()
 {
     delete sprite;
-    delete speed;
+    delete basicWeapon;
     delete tail;
 }
 
-// -------------------------------------------------------------------------------
-
-void Player::Move(Vector && v)
+void Player::Move(Vector &&v)
 {
     speed->Add(v);
 
-    // limita velocidade máxima
     if (speed->Magnitude() > 10.0f)
         speed->ScaleTo(10.0f);
-
 }
-
-// -------------------------------------------------------------------------------
 
 void Player::Update()
 {
-    // magnitude do vetor aceleração
     float accel = 40.0f * gameTime;
 
-    // modifica vetor velocidade do player
     if (window->KeyDown(VK_RIGHT) && window->KeyDown(VK_UP))
         Move(Vector(45.0f, accel));
     else if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_UP))
@@ -88,30 +66,66 @@ void Player::Update()
         Move(Vector(90.0f, accel));
     else if (window->KeyDown(VK_DOWN))
         Move(Vector(270.0f, accel));
+    else if (speed->Magnitude() > 0.1f)
+        Move(Vector(speed->Angle() + 180.0f, 5.0f * gameTime));
     else
-        // se nenhuma tecla está pressionada comece a frear
-        if (speed->Magnitude() > 0.1f)
-            Move(Vector(speed->Angle() + 180.0f, 5.0f * gameTime));
-        else
-            // velocidade muita baixa, não use soma vetorial, apenas pare
-            speed->ScaleTo(0.0f);
-    
-    // movimenta objeto pelo seu vetor velocidade
-    Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
+        speed->ScaleTo(0.0f);
 
-    // dispara míssil
     if (window->KeyPress(VK_SPACE))
     {
-        GeoWars::audio->Play(FIRE);
-        GeoWars::scene->Add(new Missile(), STATIC);
+        if (fireRate.Ready())
+        {
+            GeoWars::audio->Play(FIRE);
+            GeoWars::scene->Add(new Missile(), STATIC);
+            fireRate.Restart();
+        }
     }
 
-    // atualiza calda do jogador
+    if (GeoWars::gamepadOn)
+    {
+        Controller *&gamepad = GeoWars::gamepad;
+        long deadzone = 0.2f * 32767.0f;
+
+        if (gamepad->XboxAnalog(ThumbLX) > deadzone)
+            Move(Vector(0.0f, accel));
+        else if (gamepad->XboxAnalog(ThumbLX) < -deadzone)
+            Move(Vector(180.0f, accel));
+
+        if (gamepad->XboxAnalog(ThumbLY) > deadzone)
+            Move(Vector(90.0f, accel));
+        else if (gamepad->XboxAnalog(ThumbLY) < -deadzone)
+            Move(Vector(270.0f, accel));
+
+        Vector weapon = Vector(0.f, 0.f);
+
+        float rx = gamepad->XboxAnalog(ThumbRX);
+        if (rx > deadzone || rx < -deadzone)
+            weapon.Add(Vector(0.0f, rx));
+
+        float ry = gamepad->XboxAnalog(ThumbRY);
+        if (ry > deadzone || ry < -deadzone)
+            weapon.Add(Vector(90.0f, ry));
+
+        if (weapon.Magnitude() > 0.1f)
+        {
+            weaponAngle = weapon.Angle();
+            if (fireRate.Ready())
+            {
+                GeoWars::audio->Play(FIRE);
+                GeoWars::scene->Add(new Missile(), STATIC);
+                fireRate.Restart();
+            }
+        }
+    }
+
+    Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
+
     tail->Config().angle = speed->Angle() + 180;
     tail->Generate(x - 10 * cos(speed->Radians()), y + 10 * sin(speed->Radians()));
     tail->Update(gameTime);
 
-    // restringe a área do jogo
+    fireRate.Update(gameTime);
+
     if (x < 50)
         MoveTo(50, y);
     if (y < 50)
@@ -122,13 +136,9 @@ void Player::Update()
         MoveTo(x, game->Height() - 50);
 }
 
-// ---------------------------------------------------------------------------------
-
 void Player::Draw()
 {
-    sprite->Draw(x, y, Layer::MIDDLE, 1.0f, -speed->Angle() + 90.0f);
+    sprite->Draw(x, y, LAYER_PLAYER, 1.0f, -speed->Angle() + 90.0f);
+    basicWeapon->Draw(x, y, LAYER_PLAYER_BASIC_WEAPON, 1.0f, -weaponAngle + 90.0f);
     tail->Draw(Layer::LOWER, 1.0f);
 }
-
-
-// -------------------------------------------------------------------------------
