@@ -1,5 +1,5 @@
 #include "GeoWars.h"
-#include "Blue.h"
+#include "EnemyShip.h"
 #include "Delay.h"
 #include "Engine.h"
 #include "Mothership.h"
@@ -37,7 +37,7 @@ void GeoWars::Init()
 
     scene->Add(player, MOVING);
     scene->Add(new Mothership(player), MOVING);
-    scene->Add(new Blue(player), MOVING);
+    scene->Add(new EnemyShip(player), MOVING);
     scene->Add(new Orange(player), MOVING);
 
     float difx = (game->Width() - window->Width()) / 2.0f;

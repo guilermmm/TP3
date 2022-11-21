@@ -39,7 +39,7 @@ Explosion::Explosion(float pX, float pY)
     sparks = new Particles(explosion);
 
     // gera 25 part�culas na posi��o de contato
-    sparks->Generate(pX, pY, 25);
+    sparks->Generate(pX, pY, 50);
     type = EXPLOSION;
 }
 

@@ -13,6 +13,7 @@ enum ObjectIds
 {
     PLAYER,
     MISSILE,
+    ENEMYMISSILE,
     BLUE,
     GREEN,
     MAGENTA,

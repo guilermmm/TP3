@@ -1,16 +1,16 @@
 /**********************************************************************************
-// Blue (Arquivo de Cabeçalho)
+// Blue (Arquivo de Cabeï¿½alho)
 // 
-// Criação:     10 Out 2012
-// Atualização: 01 Nov 2021
+// Criaï¿½ï¿½o:     10 Out 2012
+// Atualizaï¿½ï¿½o: 01 Nov 2021
 // Compilador:  Visual C++ 2019
 //
-// Descrição:   Objeto faz uma perseguição suavizada
+// Descriï¿½ï¿½o:   Objeto faz uma perseguiï¿½ï¿½o suavizada
 //
 **********************************************************************************/
 
-#ifndef _GEOWARS_BLUE_H_
-#define _GEOWARS_BLUE_H_
+#ifndef _GEOWARS_ENEMY_SHIP_H_
+#define _GEOWARS_ENEMY_SHIP_H_
 
 // ---------------------------------------------------------------------------------
 
@@ -19,29 +19,32 @@
 #include "Sprite.h"
 #include "Vector.h"
 #include "Player.h"
+#include "Cooldown.h"
 
 // ---------------------------------------------------------------------------------
 
-class Blue : public Object
+class EnemyShip : public Object
 {
 private:
     Sprite * sprite;                    // sprite do objeto
-    Vector * speed;                     // velocidade e direção
+    Vector * speed;                     // velocidade e direï¿½ï¿½o
     Player * player;                    // ponteiro para jogador
     float factor;                       // fator de escala
+
+    Cooldown attackCd{ 1.5f };
     
 public:
-    Blue(Player * p);                   // construtor
-    ~Blue();                            // destrutor
+    EnemyShip(Player * p);                   // construtor
+    ~EnemyShip();                            // destrutor
     
-    void OnCollision(Object* obj);      // resolução da colisão
-    void Update();                      // atualização
+    void OnCollision(Object* obj);      // resoluï¿½ï¿½o da colisï¿½o
+    void Update();                      // atualizaï¿½ï¿½o
     void Draw();                        // desenho
 }; 
 
 // ---------------------------------------------------------------------------------
 
-inline void Blue::Draw()
+inline void EnemyShip::Draw()
 { sprite->Draw(x, y, Layer::LOWER, scale, rotation); }
 
 // ---------------------------------------------------------------------------------

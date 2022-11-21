@@ -13,7 +13,8 @@ class Player : public Object
   private:
     Sprite *sprite;
     Sprite *basicWeapon;
-    Particles *tail;
+    Particles *tailLeft;
+    Particles *tailRight;
     Vector *speed;
     float weaponAngle;
     Cooldown fireRate = {0.2f};

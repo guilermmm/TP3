@@ -23,19 +23,21 @@ Player::Player()
     emitter.percentToDim = 0.6f;
     emitter.minSpeed = 50.0f;
     emitter.maxSpeed = 100.0f;
-    emitter.color.r = 1.0f;
-    emitter.color.g = 1.0f;
-    emitter.color.b = 1.0f;
+    emitter.color.r = 0.0f;
+    emitter.color.g = 0.0f;
+    emitter.color.b = 0.0f;
     emitter.color.a = 1.0f;
 
-    tail = new Particles(emitter);
+    tailLeft = new Particles(emitter);
+    tailRight = new Particles(emitter);
 }
 
 Player::~Player()
 {
     delete sprite;
     delete basicWeapon;
-    delete tail;
+    delete tailLeft;
+    delete tailRight;
 }
 
 void Player::Move(Vector &&v)
@@ -122,9 +124,17 @@ void Player::Update()
 
     Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
 
-    tail->Config().angle = speed->Angle() + 180;
-    tail->Generate(x - 10 * cos(speed->Radians()), y + 10 * sin(speed->Radians()));
-    tail->Update(gameTime);
+    Vector tail(speed->Angle() + 160.0f, 30.0f);
+
+    tailLeft->Config().angle = speed->Angle() + 180;
+    tailLeft->Generate(x + tail.XComponent(), y - tail.YComponent());
+    tailLeft->Update(gameTime);
+
+    tail.Rotate(-40.0f);
+
+    tailRight->Config().angle = speed->Angle() + 180;
+    tailRight->Generate(x + tail.XComponent(), y - tail.YComponent());
+    tailRight->Update(gameTime);
 
     fireRate.Update(gameTime);
 
@@ -142,5 +152,6 @@ void Player::Draw()
 {
     sprite->Draw(x, y, LAYER_PLAYER, 1.0f, -speed->Angle() + 90.0f);
     basicWeapon->Draw(x, y, LAYER_PLAYER_BASIC_WEAPON, 1.0f, -weaponAngle + 90.0f);
-    tail->Draw(Layer::LOWER, 1.0f);
+    tailLeft->Draw(Layer::LOWER, 1.0f);
+    tailRight->Draw(Layer::LOWER, 1.0f);
 }
