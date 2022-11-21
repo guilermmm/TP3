@@ -16,17 +16,12 @@ class Kamikaze : public Object
     float factor;
 
   public:
-    Kamikaze(float pX, float pY);
+    Kamikaze(Image *img, float pX, float pY);
     ~Kamikaze();
 
     void OnCollision(Object *obj);
     void Update();
     void Draw();
 };
-
-inline void Kamikaze::Draw()
-{
-    sprite->Draw(x, y, Layer::LOWER, scale, rotation);
-}
 
 #endif

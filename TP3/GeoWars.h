@@ -20,7 +20,6 @@ enum ObjectIds
     ORANGE,
     WALLHIT,
 
-
     ENEMY,
     EXPLOSION,
 };
@@ -38,6 +37,8 @@ class GeoWars : public Game
 {
   private:
     Background *backg = nullptr;
+    Image *motherShipImg = nullptr;
+    Image *enemyShipImg = nullptr;
     Hud *hud = nullptr;
     bool viewBBox = false;
 

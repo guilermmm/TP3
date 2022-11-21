@@ -1,6 +1,6 @@
 #include "GeoWars.h"
-#include "EnemyShip.h"
 #include "Delay.h"
+#include "EnemyShip.h"
 #include "Engine.h"
 #include "Mothership.h"
 #include "Orange.h"
@@ -29,15 +29,18 @@ void GeoWars::Init()
     audio->Volume(FIRE, 0.2f);
     audio->Volume(START, 0.8f);
 
-    backg = new Background("Resources/Space.jpg");
+    backg = new Background("Resources/WIP/background.png");
+    motherShipImg = new Image("Resources/WIP/MotherShip.png");
+    enemyShipImg = new Image("Resources/WIP/EnemyShip.png");
+
     player = new Player();
     scene = new Scene();
 
     hud = new Hud();
 
     scene->Add(player, MOVING);
-    scene->Add(new Mothership(player), MOVING);
-    scene->Add(new EnemyShip(player), MOVING);
+    scene->Add(new Mothership(motherShipImg, player), MOVING);
+    scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
     scene->Add(new Orange(player), MOVING);
 
     float difx = (game->Width() - window->Width()) / 2.0f;

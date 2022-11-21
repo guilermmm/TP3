@@ -5,9 +5,9 @@
 #include "Random.h"
 #include "Util.h"
 
-Kamikaze::Kamikaze(float pX, float pY) : player(GeoWars::player)
+Kamikaze::Kamikaze(Image *img, float pX, float pY) : player(GeoWars::player)
 {
-    sprite = new Sprite("Resources/Magenta.png");
+    sprite = new Sprite(img);
     speed = new Vector(0, 5.0f);
     BBox(new Circle(18.0f));
 
@@ -68,4 +68,9 @@ void Kamikaze::Update()
     Scale(1.0f + factor * gameTime);
 
     Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
+}
+
+void Kamikaze::Draw()
+{
+    sprite->Draw(x, y, Layer::LOWER, scale, 90.f - speed->Angle());
 }

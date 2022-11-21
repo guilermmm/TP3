@@ -18,15 +18,15 @@ Player::Player()
     emitter.imgFile = "Resources/Spark.png";
     emitter.angle = 270.0f;
     emitter.spread = 50;
-    emitter.lifetime = 0.3f;
-    emitter.frequency = 0.010f;
-    emitter.percentToDim = 0.6f;
-    emitter.minSpeed = 50.0f;
-    emitter.maxSpeed = 100.0f;
-    emitter.color.r = 0.0f;
-    emitter.color.g = 0.0f;
-    emitter.color.b = 0.0f;
-    emitter.color.a = 1.0f;
+    emitter.lifetime = .5f;
+    emitter.frequency = .005f;
+    emitter.percentToDim = .1f;
+    emitter.minSpeed = 25.f;
+    emitter.maxSpeed = 75.f;
+    emitter.color.r = .5f;
+    emitter.color.g = .5f;
+    emitter.color.b = .5f;
+    emitter.color.a = .75f;
 
     tailLeft = new Particles(emitter);
     tailRight = new Particles(emitter);
