@@ -16,6 +16,9 @@ EnemyShip::EnemyShip(Image *img, Player *p) : player(p)
     MoveTo(posX.Rand(), posY.Rand());
 
     factor = -0.25f;
+
+    hp = 15;
+
     type = ENEMY;
 }
 
@@ -25,31 +28,12 @@ EnemyShip::~EnemyShip()
     delete speed;
 }
 
-void EnemyShip::OnCollision(Object *obj)
+void EnemyShip::TakeDamage(uint damage)
 {
-    switch (obj->Type())
-    {
-    case MISSILE: {
-        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
-        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
-    }
-    break;
-    case PLAYER: {
-        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
-        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
-    }
-    case ENEMY: {
-        Point self = Point(this->x, this->y);
-        Point other = Point(obj->X(), obj->Y());
-
-        Vector vec = Vector(Line::Angle(other, self), (36.f - Point::Distance(self, other)));
-
-        Translate(vec.XComponent() * 5.f * gameTime, -vec.YComponent() * 5.f * gameTime);
-    }
-    break;
-    }
+    if (hp > damage)
+        hp -= damage;
+    else
+        hp = 0;
 }
 
 void EnemyShip::Update()
@@ -88,4 +72,32 @@ void EnemyShip::Update()
 void EnemyShip::Draw()
 {
     sprite->Draw(x, y, Layer::LOWER, scale, rotation);
+}
+
+void EnemyShip::OnCollision(Object *obj)
+{
+    switch (obj->Type())
+    {
+    case MISSILE: {
+        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
+        GeoWars::scene->Delete(this, MOVING);
+    }
+    break;
+    case PLAYER: {
+        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
+        GeoWars::scene->Delete(this, MOVING);
+    }
+    break;
+    case ENEMY: {
+        Point self = Point(this->x, this->y);
+        Point other = Point(obj->X(), obj->Y());
+
+        Vector vec = Vector(Line::Angle(other, self), (36.f - Point::Distance(self, other)));
+
+        Translate(vec.XComponent() * 5.f * gameTime, -vec.YComponent() * 5.f * gameTime);
+    }
+    break;
+    }
 }

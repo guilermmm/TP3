@@ -8,6 +8,8 @@ Player::Player()
 {
     sprite = new Sprite("Resources/WIP/Player.png");
     basicWeapon = new Sprite("Resources/WIP/Weapon_Basic.png");
+    missileTileSet = new TileSet("Resources/WIP/Missile.png", 1, 2);
+
     speed = new Vector(90.0f, 0.0f);
     weaponAngle = 90.0f;
     BBox(new Circle(18.0f));
@@ -80,7 +82,7 @@ void Player::Update()
         if (fireRate.Ready())
         {
             GeoWars::audio->Play(FIRE);
-            GeoWars::scene->Add(new Missile(), STATIC);
+            GeoWars::scene->Add(new Missile(missileTileSet), STATIC);
             fireRate.Restart();
         }
     }
@@ -116,7 +118,7 @@ void Player::Update()
             if (fireRate.Ready())
             {
                 GeoWars::audio->Play(FIRE);
-                GeoWars::scene->Add(new Missile(), STATIC);
+                GeoWars::scene->Add(new Missile(missileTileSet), STATIC);
                 fireRate.Restart();
             }
         }

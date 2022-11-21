@@ -15,6 +15,8 @@ Kamikaze::Kamikaze(Image *img, float pX, float pY) : player(GeoWars::player)
     RandF posY{game->Height() - 400, game->Height() - 300};
     MoveTo(pX, pY);
 
+    hp = 5;
+
     type = ENEMY;
 }
 
@@ -24,35 +26,22 @@ Kamikaze::~Kamikaze()
     delete speed;
 }
 
-void Kamikaze::OnCollision(Object *obj)
+void Kamikaze::TakeDamage(uint damage)
 {
-    switch (obj->Type())
-    {
-    case MISSILE: {
-        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
-        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
-    }
-    break;
-    case PLAYER: {
-        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
-        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
-    }
-    case ENEMY: {
-        Point self = Point(this->x, this->y);
-        Point other = Point(obj->X(), obj->Y());
-
-        Vector vec = Vector(Line::Angle(other, self), (36.f - Point::Distance(self, other)));
-
-        Translate(vec.XComponent() * 5.f * gameTime, -vec.YComponent() * 5.f * gameTime);
-    }
-    break;
-    }
+    if (hp > damage)
+        hp -= damage;
+    else
+        hp = 0;
 }
 
 void Kamikaze::Update()
 {
+    if (hp == 0)
+    {
+        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+        GeoWars::scene->Add(new Explosion(x, y), STATIC);
+        GeoWars::scene->Delete();
+    }
 
     float angle = Line::Angle(Point(x, y), Point(player->X(), player->Y()));
     float magnitude = 8.0f * gameTime;
@@ -73,4 +62,28 @@ void Kamikaze::Update()
 void Kamikaze::Draw()
 {
     sprite->Draw(x, y, Layer::LOWER, scale, 90.f - speed->Angle());
+}
+
+void Kamikaze::OnCollision(Object *obj)
+{
+    if (hp == 0)
+        return;
+
+    switch (obj->Type())
+    {
+    case MISSILE: {
+        GeoWars::scene->Add(new Explosion(x, y), STATIC);
+        GeoWars::scene->Delete(this, MOVING);
+    }
+    break;
+    case ENEMY: {
+        Point self = Point(x, y);
+        Point other = Point(obj->X(), obj->Y());
+
+        Vector vec = Vector(Line::Angle(other, self), (36.f - Point::Distance(self, other)));
+
+        Translate(vec.XComponent() * 5.f * gameTime, -vec.YComponent() * 5.f * gameTime);
+    }
+    break;
+    }
 }

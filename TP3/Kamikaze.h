@@ -1,13 +1,13 @@
 #ifndef _GEOWARS_KAMIKAZE_H_
 #define _GEOWARS_KAMIKAZE_H_
 
-#include "Object.h"
+#include "Entity.h"
 #include "Player.h"
 #include "Sprite.h"
 #include "Types.h"
 #include "Vector.h"
 
-class Kamikaze : public Object
+class Kamikaze : public Entity
 {
   private:
     Sprite *sprite;
@@ -18,6 +18,8 @@ class Kamikaze : public Object
   public:
     Kamikaze(Image *img, float pX, float pY);
     ~Kamikaze();
+
+    void TakeDamage(uint damage);
 
     void OnCollision(Object *obj);
     void Update();

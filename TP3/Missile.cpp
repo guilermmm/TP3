@@ -1,13 +1,15 @@
 #include "Missile.h"
+#include "Entity.h"
+#include "Explosion.h"
 #include "GeoWars.h"
 #include "Util.h"
 #include "WallHit.h"
 
 Player *&Missile::player = GeoWars::player;
 
-Missile::Missile()
+Missile::Missile(TileSet *tileSet)
 {
-    sprite = new Sprite("Resources/Missile.png");
+    anim = new Animation(tileSet, 0.2f, true);
 
     BBox(new Circle(8));
 
@@ -22,7 +24,7 @@ Missile::Missile()
 
 Missile::~Missile()
 {
-    delete sprite;
+    delete anim;
 }
 
 void Missile::Update()
@@ -35,12 +37,21 @@ void Missile::Update()
         GeoWars::scene->Add(new WallHit(x, y), STATIC);
         GeoWars::scene->Delete();
     }
+
+    anim->NextFrame();
 }
 
 void Missile::OnCollision(Object *obj)
 {
     if (obj->Type() == ENEMY)
     {
+        ((Entity *)obj)->TakeDamage(5);
+        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
         GeoWars::scene->Delete(this, STATIC);
     }
+}
+
+void Missile::Draw()
+{
+    anim->Draw(x, y, Layer::UPPER, scale, rotation);
 }

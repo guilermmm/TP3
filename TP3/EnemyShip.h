@@ -2,13 +2,13 @@
 #define _GEOWARS_ENEMY_SHIP_H_
 
 #include "Cooldown.h"
-#include "Object.h"
+#include "Entity.h"
 #include "Player.h"
 #include "Sprite.h"
 #include "Types.h"
 #include "Vector.h"
 
-class EnemyShip : public Object
+class EnemyShip : public Entity
 {
   private:
     Sprite *sprite;
@@ -21,6 +21,8 @@ class EnemyShip : public Object
   public:
     EnemyShip(Image *img, Player *p);
     ~EnemyShip();
+
+    void TakeDamage(uint damage);
 
     void OnCollision(Object *obj);
     void Update();

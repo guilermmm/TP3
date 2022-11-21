@@ -1,9 +1,9 @@
 #ifndef _GEOWARS_MISSILE_H_
 #define _GEOWARS_MISSILE_H_
 
+#include "Animation.h"
 #include "Object.h"
 #include "Player.h"
-#include "Sprite.h"
 #include "Vector.h"
 
 class Missile : public Object
@@ -13,28 +13,23 @@ class Missile : public Object
     const float BaseVolume = 0.8f;
 
     static Player *&player;
-    Sprite *sprite;
+    Animation *anim;
     Vector speed;
 
   public:
-    Missile();
+    Missile(TileSet *tileSet);
     ~Missile();
 
     Vector &Speed();
     void Update();
     void Draw();
 
-    void OnCollision(Object* obj);
+    void OnCollision(Object *obj);
 };
 
 inline Vector &Missile::Speed()
 {
     return speed;
-}
-
-inline void Missile::Draw()
-{
-    sprite->Draw(x, y, Layer::UPPER, scale, rotation);
 }
 
 #endif

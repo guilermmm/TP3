@@ -1,13 +1,13 @@
 #ifndef _GEOWARS_MOTHERSHIP_H_
 #define _GEOWARS_MOTHERSHIP_H_
 
-#include "Object.h"
+#include "Entity.h"
 #include "Player.h"
 #include "Sprite.h"
 #include "Types.h"
 #include "Vector.h"
 
-class Mothership : public Object
+class Mothership : public Entity
 {
   private:
     Sprite *sprite;
@@ -20,6 +20,8 @@ class Mothership : public Object
   public:
     Mothership(Image *img, Player *p);
     ~Mothership();
+
+    void TakeDamage(uint damage);
 
     void OnCollision(Object *obj);
     void Update();

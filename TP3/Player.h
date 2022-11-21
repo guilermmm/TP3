@@ -1,6 +1,7 @@
 #ifndef _GEOWARS_PLAYER_H_
 #define _GEOWARS_PLAYER_H_
 
+#include "Animation.h"
 #include "Controller.h"
 #include "Cooldown.h"
 #include "Object.h"
@@ -13,6 +14,7 @@ class Player : public Object
   private:
     Sprite *sprite;
     Sprite *basicWeapon;
+    TileSet *missileTileSet;
     Particles *tailLeft;
     Particles *tailRight;
     Vector *speed;
