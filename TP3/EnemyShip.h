@@ -17,7 +17,9 @@ class EnemyShip : public Entity
     Particles* tail;
     float factor;
 
-    Cooldown attackCd{1.5f};
+    RandF cd{ 1.0f,2.0f };
+
+    Cooldown attackCd{cd.Rand(), false};
 
   public:
     EnemyShip(Image *img, Player *p);

@@ -14,8 +14,8 @@ Mothership::Mothership(Image *img, Player *p) : player(p)
 
     distance = 600;
 
-    RandF posX{game->Width(), game->Width()};
-    RandF posY{game->Height(), game->Height()};
+    RandF posX{200, game->Width() - 200};
+    RandF posY{200, game->Height() - 200 };
     MoveTo(posX.Rand(), posY.Rand());
 
     spawnCd.Restart();

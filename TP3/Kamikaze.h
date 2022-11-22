@@ -15,6 +15,9 @@ class Kamikaze : public Entity
     Player *player;
     Particles* tail;
     float factor;
+    float maxSpeed;
+
+    RandF randSpeed{ 5.0f, 10.0f };
 
   public:
     Kamikaze(Image *img, float pX, float pY);

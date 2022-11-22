@@ -3,6 +3,7 @@
 #include "EnemyShip.h"
 #include "Engine.h"
 #include "Mothership.h"
+#include "Kamikaze.h"
 #include "Orange.h"
 #include "Resources.h"
 
@@ -14,11 +15,14 @@ Controller *GeoWars::gamepad = nullptr;
 bool GeoWars::gamepadOn = false;
 uint GeoWars::xboxPlayer = PLAYER1;
 GameState GeoWars::state = TITLESCREEN;
+int GeoWars::enemyCount = 0;
 
 void GeoWars::Init()
 {
     gamepad = new Controller();
     gamepadOn = gamepad->XboxInitialize(xboxPlayer);
+
+    enemyCount = 0;
 
     audio = new Audio();
     audio->Add(THEME, "Resources/audio/theme.wav");
@@ -42,6 +46,7 @@ void GeoWars::Init()
     backg = new Background("Resources/WIP/background.png");
     motherShipImg = new Image("Resources/WIP/MotherShip.png");
     enemyShipImg = new Image("Resources/WIP/EnemyShip.png");
+    kamikazeImg = new Image("Resources/WIP/Kamikaze.png");
 
     titleScreen = new Sprite("Resources/WIP/TitleScreen.png");
     playButton = new Sprite("Resources/WIP/TextPlay.png");
@@ -67,9 +72,19 @@ void GeoWars::Setup()
     scene = new Scene();
     player = new Player();
     scene->Add(player, MOVING);
-    scene->Add(new Mothership(motherShipImg, player), MOVING);
-    scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
-    scene->Add(new Orange(player), MOVING);
+
+    wave = FIRST;
+    firstCtrl = true;
+    secondCtrl = true;
+    thirdCtrl = true;
+
+    enemyCount = 25;
+
+    posX = RandF{ 0, game->Width() };
+    posY = RandF{ 0, game->Height() };
+
+    /*scene->Add(new Mothership(motherShipImg, player), MOVING);
+    scene->Add(new EnemyShip(enemyShipImg, player), MOVING);*/
 }
 
 void GeoWars::Cleanup()
@@ -197,6 +212,76 @@ void GeoWars::Update()
         break;
     }
     }
+
+    if (enemyCount == 5)
+        wave = SECOND;
+    if (enemyCount == 16)
+        wave = THIRD;
+    if (enemyCount == 26)
+        wave = NONSTOP;
+
+    switch (wave)
+    {
+    case FIRST:
+        if (firstCtrl)
+        {
+            firstCtrl = false;
+            for (int i = 0; i < 5; i++)
+            {
+                scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
+            }
+        }
+        break;
+    case SECOND:
+        if (secondCtrl)
+        {
+            secondCtrl = false;
+            for (int i = 0; i < 10; i++)
+            {
+                scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
+            }
+            scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
+        }
+        break;
+    case THIRD:
+        if (thirdCtrl)
+        {
+            thirdCtrl = false;
+            for (int i = 0; i < 5; i++)
+            {
+                scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
+            }
+            scene->Add(new Mothership(motherShipImg, player), MOVING);
+        }
+        break;
+    case NONSTOP:
+        if (kamikazeCd.Ready())
+        {
+            kamikazeCd.Restart();
+            scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
+        }
+        if (shipCd.Ready())
+        {
+            shipCd.Restart();
+            scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
+        }
+        if (motherShipCd.Ready())
+        {
+            motherShipCd.Restart();
+            scene->Add(new Mothership(motherShipImg, player), MOVING);
+        }
+        break;
+    default:
+        break;
+    }
+
+    kamikazeCd.Update(gameTime);
+    shipCd.Update(gameTime);
+    motherShipCd.Update(gameTime);
 }
 
 void GeoWars::Draw()

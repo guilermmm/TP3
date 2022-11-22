@@ -11,8 +11,8 @@ EnemyShip::EnemyShip(Image *img, Player *p) : player(p)
     speed = new Vector(0, 2.0f);
     BBox(new Circle(20.0f));
 
-    RandF posX{game->Width() - 400, game->Width() - 300};
-    RandF posY{300, 400};
+    RandF posX{300, game->Width() - 300};
+    RandF posY{300, game->Height() - 300};
     MoveTo(posX.Rand(), posY.Rand());
 
     Generator emitter;
@@ -96,6 +96,8 @@ void EnemyShip::Update()
     {
         attackCd.Restart();
         GeoWars::scene->Add(new EnemyMissile(this), STATIC);
+        GeoWars::audio->Play(ENEMYFIRE);
+
     }
 
     attackCd.Update(gameTime);

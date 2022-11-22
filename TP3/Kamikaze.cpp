@@ -8,7 +8,8 @@
 Kamikaze::Kamikaze(Image *img, float pX, float pY) : player(GeoWars::player)
 {
     sprite = new Sprite(img);
-    speed = new Vector(0, 5.0f);
+    maxSpeed = randSpeed.Rand();
+    speed = new Vector(0, maxSpeed);
     BBox(new Circle(18.0f));
 
     RandF posX{300, 400};
@@ -40,6 +41,8 @@ Kamikaze::~Kamikaze()
 {
     delete sprite;
     delete speed;
+    delete tail;
+    GeoWars::IncrementEnemyCount();
 }
 
 bool Kamikaze::TakeDamage(uint damage)
@@ -68,8 +71,8 @@ void Kamikaze::Update()
 
     speed->Add(target);
 
-    if (speed->Magnitude() > 5.f)
-        speed->ScaleTo(5.f);
+    if (speed->Magnitude() > maxSpeed)
+        speed->ScaleTo(maxSpeed);
 
     Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
 
