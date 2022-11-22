@@ -28,7 +28,11 @@ enum SoundIds
     START,
     FIRE,
     EXPLODE,
-    HITWALL
+    HITWALL,
+
+    SGAMEOVER,
+    ENEMYFIRE,
+    ENEMYSPAWN,
 };
 
 enum GameState

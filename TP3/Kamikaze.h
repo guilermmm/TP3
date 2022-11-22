@@ -13,6 +13,7 @@ class Kamikaze : public Entity
     Sprite *sprite;
     Vector *speed;
     Player *player;
+    Particles* tail;
     float factor;
 
   public:

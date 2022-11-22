@@ -15,6 +15,22 @@ EnemyShip::EnemyShip(Image *img, Player *p) : player(p)
     RandF posY{300, 400};
     MoveTo(posX.Rand(), posY.Rand());
 
+    Generator emitter;
+    emitter.imgFile = "Resources/Spark.png";
+    emitter.angle = 270.0f;
+    emitter.spread = 50;
+    emitter.lifetime = .2f;
+    emitter.frequency = .005f;
+    emitter.percentToDim = .1f;
+    emitter.minSpeed = 25.f;
+    emitter.maxSpeed = 40.f;
+    emitter.color.r = .5f;
+    emitter.color.g = .1f;
+    emitter.color.b = .5f;
+    emitter.color.a = .75f;
+
+    tail = new Particles(emitter);
+
     factor = -0.25f;
 
     hp = 15;
@@ -42,7 +58,7 @@ void EnemyShip::Update()
 {
     if (hp == 0)
     {
-        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+        GeoWars::audio->Play(EXPLODE, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
         GeoWars::scene->Add(new Explosion(x, y), STATIC);
         GeoWars::scene->Delete();
         return;
@@ -70,6 +86,12 @@ void EnemyShip::Update()
     if (y > game->Height() - 20)
         MoveTo(x, game->Height() - 20);
 
+    Vector butt(Line::Angle(Point(x, y), Point(player->X(), player->Y())) + 180, 20.0f);
+
+    tail->Config().angle = speed->Angle() + 180;
+    tail->Generate(x + butt.XComponent(), y - butt.YComponent());
+    tail->Update(gameTime);
+
     if (attackCd.Ready())
     {
         attackCd.Restart();
@@ -82,6 +104,7 @@ void EnemyShip::Update()
 void EnemyShip::Draw()
 {
     sprite->Draw(x, y, Layer::LOWER, scale, rotation);
+    tail->Draw(Layer::LOWER, 1.0f);
 }
 
 void EnemyShip::OnCollision(Object *obj)

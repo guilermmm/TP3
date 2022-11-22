@@ -14,6 +14,7 @@ class EnemyShip : public Entity
     Sprite *sprite;
     Vector *speed;
     Player *player;
+    Particles* tail;
     float factor;
 
     Cooldown attackCd{1.5f};

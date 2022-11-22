@@ -20,14 +20,23 @@ void GeoWars::Init()
     gamepadOn = gamepad->XboxInitialize(xboxPlayer);
 
     audio = new Audio();
-    audio->Add(THEME, "Resources/Theme.wav");
-    audio->Add(FIRE, "Resources/Fire.wav");
+    audio->Add(THEME, "Resources/audio/theme.wav");
+    audio->Add(FIRE, "Resources/audio/laser.wav");
+    audio->Add(ENEMYFIRE, "Resources/audio/laser2.wav");
+    audio->Add(ENEMYSPAWN, "Resources/audio/spawn.wav");
     audio->Add(HITWALL, "Resources/Hitwall.wav");
-    audio->Add(EXPLODE, "Resources/Explode.wav");
+    audio->Add(EXPLODE, "Resources/audio/radioactivity.wav");
+    audio->Add(SGAMEOVER, "Resources/audio/gameover.wav");
     audio->Add(START, "Resources/Start.wav");
 
-    audio->Volume(FIRE, 0.2f);
-    audio->Volume(START, 0.8f);
+    audio->Volume(FIRE, 0.1f);
+    audio->Volume(ENEMYFIRE, 0.1f);
+    audio->Volume(ENEMYSPAWN, 0.4f);
+    audio->Volume(HITWALL, 0.1f);
+    audio->Volume(EXPLODE, 0.1f);
+    audio->Volume(THEME, 0.8f);
+
+    audio->Play(THEME, 0.8f, true);
 
     backg = new Background("Resources/WIP/background.png");
     motherShipImg = new Image("Resources/WIP/MotherShip.png");

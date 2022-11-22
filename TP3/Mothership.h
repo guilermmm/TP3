@@ -15,6 +15,9 @@ class Mothership : public Entity
     Vector *speed;
     Player *player;
     Cooldown spawnCd{2.0f};
+    Particles* tailLeft;
+    Particles* tailMiddle;
+    Particles* tailRight;
     int distance;
 
   public:
