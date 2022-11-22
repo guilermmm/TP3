@@ -20,8 +20,6 @@ class GeoWars : public Game
     Hud *hud = nullptr;
     bool viewBBox = false;
 
-    GameState state = TITLESCREEN;
-
     Sprite *titleScreen = nullptr;
     Sprite *playButton = nullptr;
     float playScale = 1.0f;
@@ -42,6 +40,10 @@ class GeoWars : public Game
     static Controller *gamepad;
     static bool gamepadOn;
     static uint xboxPlayer;
+    static GameState state;
+
+    void Setup();
+    void Cleanup();
 
     void Init();
     void Update();

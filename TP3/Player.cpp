@@ -73,8 +73,8 @@ void Player::Update()
 {
     if (hp == 0)
     {
-        // TODO: game over
-        // return;
+        GeoWars::state = GAMEOVER;
+        return;
     }
 
     float accel = 40.0f * gameTime;
@@ -113,26 +113,25 @@ void Player::Update()
     if (GeoWars::gamepadOn)
     {
         Controller *&gamepad = GeoWars::gamepad;
-        long deadzone = 0.2f * 32767.0f;
 
-        if (gamepad->XboxAnalog(ThumbLX) > deadzone)
+        if (gamepad->XboxAnalog(ThumbLX) > 0)
             Move(Vector(0.0f, accel));
-        else if (gamepad->XboxAnalog(ThumbLX) < -deadzone)
+        else if (gamepad->XboxAnalog(ThumbLX) < 0)
             Move(Vector(180.0f, accel));
 
-        if (gamepad->XboxAnalog(ThumbLY) > deadzone)
+        if (gamepad->XboxAnalog(ThumbLY) > 0)
             Move(Vector(90.0f, accel));
-        else if (gamepad->XboxAnalog(ThumbLY) < -deadzone)
+        else if (gamepad->XboxAnalog(ThumbLY) < 0)
             Move(Vector(270.0f, accel));
 
         Vector weapon = Vector(0.f, 0.f);
 
         float rx = gamepad->XboxAnalog(ThumbRX);
-        if (rx > deadzone || rx < -deadzone)
+        if (rx != 0)
             weapon.Add(Vector(0.0f, rx));
 
         float ry = gamepad->XboxAnalog(ThumbRY);
-        if (ry > deadzone || ry < -deadzone)
+        if (ry != 0)
             weapon.Add(Vector(90.0f, ry));
 
         if (weapon.Magnitude() > 0.1f)

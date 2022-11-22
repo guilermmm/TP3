@@ -13,6 +13,7 @@ bool GeoWars::viewHUD = false;
 Controller *GeoWars::gamepad = nullptr;
 bool GeoWars::gamepadOn = false;
 uint GeoWars::xboxPlayer = PLAYER1;
+GameState GeoWars::state = TITLESCREEN;
 
 void GeoWars::Init()
 {
@@ -48,15 +49,9 @@ void GeoWars::Init()
     gameOverScreen = new Sprite("Resources/WIP/GameOver.png");
     restartButton = new Sprite("Resources/WIP/TextRestart.png");
 
-    player = new Player();
-    scene = new Scene();
-
     hud = new Hud();
 
-    scene->Add(player, MOVING);
-    scene->Add(new Mothership(motherShipImg, player), MOVING);
-    scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
-    scene->Add(new Orange(player), MOVING);
+    Setup();
 
     float difx = (game->Width() - window->Width()) / 2.0f;
     float dify = (game->Height() - window->Height()) / 2.0f;
@@ -65,6 +60,21 @@ void GeoWars::Init()
     viewport.right = viewport.left + window->Width();
     viewport.top = 0.0f + dify;
     viewport.bottom = viewport.top + window->Height();
+}
+
+void GeoWars::Setup()
+{
+    scene = new Scene();
+    player = new Player();
+    scene->Add(player, MOVING);
+    scene->Add(new Mothership(motherShipImg, player), MOVING);
+    scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
+    scene->Add(new Orange(player), MOVING);
+}
+
+void GeoWars::Cleanup()
+{
+    delete scene;
 }
 
 void GeoWars::Update()
@@ -123,7 +133,12 @@ void GeoWars::Update()
         viewport.bottom = viewport.top + window->Height();
 
         if (window->KeyDown(VK_RETURN) || (gamepadOn && gamepad->XboxButton(ButtonA)))
+        {
+            Cleanup();
+            Setup();
+
             state = PLAYING;
+        }
 
         if (restartScaleUp)
         {
