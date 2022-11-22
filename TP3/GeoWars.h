@@ -1,14 +1,15 @@
 #ifndef _GEOWARS_H_
 #define _GEOWARS_H_
 
-#include "Animation.h"
 #include "Audio.h"
 #include "Background.h"
 #include "Controller.h"
+#include "Font.h"
 #include "Game.h"
 #include "Hud.h"
 #include "Player.h"
 #include "Scene.h"
+#include "Sprite.h"
 
 class GeoWars : public Game
 {
@@ -21,10 +22,17 @@ class GeoWars : public Game
 
     GameState state = TITLESCREEN;
 
-    TileSet *titleScreenTiles = nullptr;
-    Animation *titleScreen = nullptr;
-    TileSet *gameOverTiles = nullptr;
-    Animation *gameOverScreen = nullptr;
+    Sprite *titleScreen = nullptr;
+    Sprite *playButton = nullptr;
+    float playScale = 1.0f;
+    bool playScaleUp = true;
+    Sprite *quitButton = nullptr;
+    bool quitScaleUp = true;
+    float quitScale = 1.0f;
+    Sprite *gameOverScreen = nullptr;
+    Sprite *restartButton = nullptr;
+    float restartScale = 1.0f;
+    bool restartScaleUp = true;
 
   public:
     static Player *player;

@@ -71,6 +71,12 @@ void Player::Move(Vector &&v)
 
 void Player::Update()
 {
+    if (hp == 0)
+    {
+        // TODO: game over
+        // return;
+    }
+
     float accel = 40.0f * gameTime;
 
     if (window->KeyDown(VK_RIGHT) && window->KeyDown(VK_UP))

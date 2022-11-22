@@ -43,6 +43,7 @@ void Kamikaze::Update()
         GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
         GeoWars::scene->Add(new Explosion(x, y), STATIC);
         GeoWars::scene->Delete();
+        return;
     }
 
     float angle = Line::Angle(Point(x, y), Point(player->X(), player->Y()));
@@ -78,11 +79,6 @@ void Kamikaze::OnCollision(Object *obj)
 
     switch (obj->Type())
     {
-    case MISSILE: {
-        GeoWars::scene->Add(new Explosion(x, y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
-    }
-    break;
     case ENEMY: {
         Point self = Point(x, y);
         Point other = Point(obj->X(), obj->Y());

@@ -40,6 +40,14 @@ bool EnemyShip::TakeDamage(uint damage)
 
 void EnemyShip::Update()
 {
+    if (hp == 0)
+    {
+        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+        GeoWars::scene->Add(new Explosion(x, y), STATIC);
+        GeoWars::scene->Delete();
+        return;
+    }
+
     float angle = Line::Angle(Point(x, y), Point(player->X(), player->Y()));
     float magnitude = 1.0f * gameTime;
     Vector target = Vector(angle, magnitude);
@@ -78,14 +86,11 @@ void EnemyShip::Draw()
 
 void EnemyShip::OnCollision(Object *obj)
 {
+    if (hp == 0)
+        return;
+
     switch (obj->Type())
     {
-    case MISSILE: {
-        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
-        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
-    }
-    break;
     case PLAYER: {
         Player *player = (Player *)obj;
         if (player->TakeDamage(1))

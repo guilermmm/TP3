@@ -43,6 +43,14 @@ bool Mothership::TakeDamage(uint damage)
 
 void Mothership::Update()
 {
+    if (hp == 0)
+    {
+        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+        GeoWars::scene->Add(new Explosion(x, y), STATIC);
+        GeoWars::scene->Delete();
+        return;
+    }
+
     float angle = Line::Angle(Point(x, y), Point(player->X(), player->Y()));
     float magnitude = 10.0f * gameTime;
     Vector target = Vector(angle, magnitude);
@@ -86,13 +94,11 @@ void Mothership::Draw()
 
 void Mothership::OnCollision(Object *obj)
 {
+    if (hp == 0)
+        return;
+
     switch (obj->Type())
     {
-    case MISSILE: {
-        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
-    }
-    break;
     case PLAYER: {
         Player *player = (Player *)obj;
         if (player->TakeDamage(1))

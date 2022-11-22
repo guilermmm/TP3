@@ -33,11 +33,11 @@ void GeoWars::Init()
     motherShipImg = new Image("Resources/WIP/MotherShip.png");
     enemyShipImg = new Image("Resources/WIP/EnemyShip.png");
 
-    titleScreenTiles = new TileSet("Resources/WIP/TitleScreen.png", 1, 1);
-    titleScreen = new Animation(titleScreenTiles, 0.2f, true);
-
-    gameOverTiles = new TileSet("Resources/WIP/GameOver.png", 1, 1);
-    gameOverScreen = new Animation(gameOverTiles, 0.2f, true);
+    titleScreen = new Sprite("Resources/WIP/TitleScreen.png");
+    playButton = new Sprite("Resources/WIP/TextPlay.png");
+    quitButton = new Sprite("Resources/WIP/TextQuit.png");
+    gameOverScreen = new Sprite("Resources/WIP/GameOver.png");
+    restartButton = new Sprite("Resources/WIP/TextRestart.png");
 
     player = new Player();
     scene = new Scene();
@@ -79,7 +79,31 @@ void GeoWars::Update()
         if (window->KeyDown(VK_RETURN) || (gamepadOn && gamepad->XboxButton(ButtonA)))
             state = PLAYING;
 
-        titleScreen->NextFrame();
+        if (playScaleUp)
+        {
+            playScale += 0.2f * gameTime;
+            if (playScale >= 1.1f)
+                playScaleUp = false;
+        }
+        else
+        {
+            playScale -= 0.2f * gameTime;
+            if (playScale <= 1.0f)
+                playScaleUp = true;
+        }
+
+        if (quitScaleUp)
+        {
+            quitScale += 0.2f * gameTime;
+            if (quitScale >= 1.1f)
+                quitScaleUp = false;
+        }
+        else
+        {
+            quitScale -= 0.2f * gameTime;
+            if (quitScale <= 1.0f)
+                quitScaleUp = true;
+        }
 
         break;
     }
@@ -92,7 +116,18 @@ void GeoWars::Update()
         if (window->KeyDown(VK_RETURN) || (gamepadOn && gamepad->XboxButton(ButtonA)))
             state = PLAYING;
 
-        gameOverScreen->NextFrame();
+        if (restartScaleUp)
+        {
+            restartScale += 0.2f * gameTime;
+            if (restartScale >= 1.1f)
+                restartScaleUp = false;
+        }
+        else
+        {
+            restartScale -= 0.2f * gameTime;
+            if (restartScale <= 1.0f)
+                restartScaleUp = true;
+        }
 
         break;
     }
@@ -145,9 +180,12 @@ void GeoWars::Draw()
     {
     case TITLESCREEN:
         titleScreen->Draw(window->CenterX(), window->CenterY(), LAYER_MENU);
+        playButton->Draw(window->CenterX(), window->CenterY() + 100, LAYER_BUTTON, playScale);
+        quitButton->Draw(window->CenterX(), window->CenterY() + 300, LAYER_BUTTON, quitScale);
         break;
     case GAMEOVER:
         gameOverScreen->Draw(window->CenterX(), window->CenterY(), LAYER_MENU);
+        restartButton->Draw(window->CenterX(), window->CenterY() + 200, LAYER_BUTTON, restartScale);
         break;
     case PLAYING:
     default:
