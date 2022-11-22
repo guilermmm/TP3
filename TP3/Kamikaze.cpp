@@ -46,19 +46,24 @@ void Kamikaze::Update()
     }
 
     float angle = Line::Angle(Point(x, y), Point(player->X(), player->Y()));
-    float magnitude = 8.0f * gameTime;
+    float magnitude = 16.0f * gameTime;
     Vector target = Vector(angle, magnitude);
 
     speed->Add(target);
 
-    if (speed->Magnitude() > 2.5f)
-        speed->ScaleTo(2.5f);
+    if (speed->Magnitude() > 5.f)
+        speed->ScaleTo(5.f);
 
     Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
 
-    Scale(1.0f + factor * gameTime);
-
-    Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
+    if (x < 20)
+        MoveTo(20, y);
+    if (y < 20)
+        MoveTo(x, 20);
+    if (x > game->Width() - 20)
+        MoveTo(game->Width() - 20, y);
+    if (y > game->Height() - 20)
+        MoveTo(x, game->Height() - 20);
 }
 
 void Kamikaze::Draw()

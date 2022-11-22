@@ -47,7 +47,7 @@ void EnemyMissile::OnCollision(Object *obj)
         {
             GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
             GeoWars::scene->Add(new WallHit(x, y), STATIC);
-            GeoWars::scene->Delete();
+            GeoWars::scene->Delete(this, STATIC);
         }
     }
 }

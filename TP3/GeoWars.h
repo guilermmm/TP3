@@ -1,6 +1,7 @@
 #ifndef _GEOWARS_H_
 #define _GEOWARS_H_
 
+#include "Animation.h"
 #include "Audio.h"
 #include "Background.h"
 #include "Controller.h"
@@ -8,30 +9,6 @@
 #include "Hud.h"
 #include "Player.h"
 #include "Scene.h"
-
-enum ObjectIds
-{
-    PLAYER,
-    MISSILE,
-    ENEMYMISSILE,
-    BLUE,
-    GREEN,
-    MAGENTA,
-    ORANGE,
-    WALLHIT,
-
-    ENEMY,
-    EXPLOSION,
-};
-
-enum SoundIds
-{
-    THEME,
-    START,
-    FIRE,
-    EXPLODE,
-    HITWALL
-};
 
 class GeoWars : public Game
 {
@@ -41,6 +18,13 @@ class GeoWars : public Game
     Image *enemyShipImg = nullptr;
     Hud *hud = nullptr;
     bool viewBBox = false;
+
+    GameState state = TITLESCREEN;
+
+    TileSet *titleScreenTiles = nullptr;
+    Animation *titleScreen = nullptr;
+    TileSet *gameOverTiles = nullptr;
+    Animation *gameOverScreen = nullptr;
 
   public:
     static Player *player;

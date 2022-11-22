@@ -33,6 +33,12 @@ void GeoWars::Init()
     motherShipImg = new Image("Resources/WIP/MotherShip.png");
     enemyShipImg = new Image("Resources/WIP/EnemyShip.png");
 
+    titleScreenTiles = new TileSet("Resources/WIP/TitleScreen.png", 1, 1);
+    titleScreen = new Animation(titleScreenTiles, 0.2f, true);
+
+    gameOverTiles = new TileSet("Resources/WIP/GameOver.png", 1, 1);
+    gameOverScreen = new Animation(gameOverTiles, 0.2f, true);
+
     player = new Player();
     scene = new Scene();
 
@@ -57,59 +63,104 @@ void GeoWars::Update()
     if (window->KeyDown(VK_ESCAPE))
         window->Close();
 
-    scene->Update();
-    scene->CollisionDetection();
-
-    if (window->KeyPress('B'))
-        viewBBox = !viewBBox;
-
-    if (window->KeyPress('H'))
-        viewHUD = !viewHUD;
-
     if (gamepadOn)
     {
         gamepad->XboxUpdateState(xboxPlayer);
     }
 
-    viewport.left = player->X() - window->CenterX();
-    viewport.right = player->X() + window->CenterX();
-    viewport.top = player->Y() - window->CenterY();
-    viewport.bottom = player->Y() + window->CenterY();
+    switch (state)
+    {
+    case TITLESCREEN: {
+        viewport.left = 0.0f;
+        viewport.right = viewport.left + window->Width();
+        viewport.top = 0.0f;
+        viewport.bottom = viewport.top + window->Height();
 
-    if (viewport.left < 0)
-    {
-        viewport.left = 0;
-        viewport.right = window->Width();
-    }
-    else if (viewport.right > game->Width())
-    {
-        viewport.left = game->Width() - window->Width();
-        viewport.right = game->Width();
-    }
+        if (window->KeyDown(VK_RETURN) || (gamepadOn && gamepad->XboxButton(ButtonA)))
+            state = PLAYING;
 
-    if (viewport.top < 0)
-    {
-        viewport.top = 0;
-        viewport.bottom = window->Height();
+        titleScreen->NextFrame();
+
+        break;
     }
-    else if (viewport.bottom > game->Height())
-    {
-        viewport.top = game->Height() - window->Height();
-        viewport.bottom = game->Height();
+    case GAMEOVER: {
+        viewport.left = 0.0f;
+        viewport.right = viewport.left + window->Width();
+        viewport.top = 0.0f;
+        viewport.bottom = viewport.top + window->Height();
+
+        if (window->KeyDown(VK_RETURN) || (gamepadOn && gamepad->XboxButton(ButtonA)))
+            state = PLAYING;
+
+        gameOverScreen->NextFrame();
+
+        break;
+    }
+    case PLAYING:
+    default: {
+        scene->Update();
+        scene->CollisionDetection();
+
+        if (window->KeyPress('B'))
+            viewBBox = !viewBBox;
+
+        if (window->KeyPress('H'))
+            viewHUD = !viewHUD;
+
+        viewport.left = player->X() - window->CenterX();
+        viewport.right = player->X() + window->CenterX();
+        viewport.top = player->Y() - window->CenterY();
+        viewport.bottom = player->Y() + window->CenterY();
+
+        if (viewport.left < 0)
+        {
+            viewport.left = 0;
+            viewport.right = window->Width();
+        }
+        else if (viewport.right > game->Width())
+        {
+            viewport.left = game->Width() - window->Width();
+            viewport.right = game->Width();
+        }
+
+        if (viewport.top < 0)
+        {
+            viewport.top = 0;
+            viewport.bottom = window->Height();
+        }
+        else if (viewport.bottom > game->Height())
+        {
+            viewport.top = game->Height() - window->Height();
+            viewport.bottom = game->Height();
+        }
+
+        break;
+    }
     }
 }
 
 void GeoWars::Draw()
 {
-    backg->Draw(viewport);
+    switch (state)
+    {
+    case TITLESCREEN:
+        titleScreen->Draw(window->CenterX(), window->CenterY(), LAYER_MENU);
+        break;
+    case GAMEOVER:
+        gameOverScreen->Draw(window->CenterX(), window->CenterY(), LAYER_MENU);
+        break;
+    case PLAYING:
+    default:
+        backg->Draw(viewport);
+        scene->Draw();
 
-    scene->Draw();
+        if (viewHUD)
+            hud->Draw();
 
-    if (viewHUD)
-        hud->Draw();
-
-    if (viewBBox)
-        scene->DrawBBox();
+        if (viewBBox)
+            scene->DrawBBox();
+        break;
+    }
 }
 
 void GeoWars::Finalize()
