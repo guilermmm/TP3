@@ -31,9 +31,9 @@ void GeoWars::Init()
     audio->Add(START, "Resources/Start.wav");
 
     audio->Volume(FIRE, 0.1f);
-    audio->Volume(ENEMYFIRE, 0.1f);
-    audio->Volume(ENEMYSPAWN, 0.4f);
-    audio->Volume(HITWALL, 0.1f);
+    audio->Volume(ENEMYFIRE, 0.2f);
+    audio->Volume(ENEMYSPAWN, 0.3f);
+    audio->Volume(HITWALL, 0.2f);
     audio->Volume(EXPLODE, 0.1f);
     audio->Volume(THEME, 0.8f);
 
@@ -85,6 +85,46 @@ void GeoWars::Update()
     if (gamepadOn)
     {
         gamepad->XboxUpdateState(xboxPlayer);
+
+        if (gamepad->XboxButton(ButtonY))
+            window->Close();
+    }
+
+    if (playScaleUp)
+    {
+        playScale += 0.2f * gameTime;
+        if (playScale >= 1.1f)
+            playScaleUp = false;
+    }
+    else
+    {
+        playScale -= 0.2f * gameTime;
+        if (playScale <= 1.0f)
+            playScaleUp = true;
+    }
+    if (quitScaleUp)
+    {
+        quitScale += 0.2f * gameTime;
+        if (quitScale >= 1.1f)
+            quitScaleUp = false;
+    }
+    else
+    {
+        quitScale -= 0.2f * gameTime;
+        if (quitScale <= 1.0f)
+            quitScaleUp = true;
+    }
+    if (restartScaleUp)
+    {
+        restartScale += 0.2f * gameTime;
+        if (restartScale >= 1.1f)
+            restartScaleUp = false;
+    }
+    else
+    {
+        restartScale -= 0.2f * gameTime;
+        if (restartScale <= 1.0f)
+            restartScaleUp = true;
     }
 
     switch (state)
@@ -97,32 +137,6 @@ void GeoWars::Update()
 
         if (window->KeyDown(VK_RETURN) || (gamepadOn && gamepad->XboxButton(ButtonA)))
             state = PLAYING;
-
-        if (playScaleUp)
-        {
-            playScale += 0.2f * gameTime;
-            if (playScale >= 1.1f)
-                playScaleUp = false;
-        }
-        else
-        {
-            playScale -= 0.2f * gameTime;
-            if (playScale <= 1.0f)
-                playScaleUp = true;
-        }
-
-        if (quitScaleUp)
-        {
-            quitScale += 0.2f * gameTime;
-            if (quitScale >= 1.1f)
-                quitScaleUp = false;
-        }
-        else
-        {
-            quitScale -= 0.2f * gameTime;
-            if (quitScale <= 1.0f)
-                quitScaleUp = true;
-        }
 
         break;
     }
@@ -138,19 +152,6 @@ void GeoWars::Update()
             Setup();
 
             state = PLAYING;
-        }
-
-        if (restartScaleUp)
-        {
-            restartScale += 0.2f * gameTime;
-            if (restartScale >= 1.1f)
-                restartScaleUp = false;
-        }
-        else
-        {
-            restartScale -= 0.2f * gameTime;
-            if (restartScale <= 1.0f)
-                restartScaleUp = true;
         }
 
         break;
@@ -204,12 +205,13 @@ void GeoWars::Draw()
     {
     case TITLESCREEN:
         titleScreen->Draw(window->CenterX(), window->CenterY(), LAYER_MENU);
-        playButton->Draw(window->CenterX(), window->CenterY() + 100, LAYER_BUTTON, playScale);
-        quitButton->Draw(window->CenterX(), window->CenterY() + 300, LAYER_BUTTON, quitScale);
+        playButton->Draw(window->CenterX() - 320.f, window->CenterY() + 200.f, LAYER_BUTTON, playScale);
+        quitButton->Draw(window->CenterX() + 320.f, window->CenterY() + 200.f, LAYER_BUTTON, quitScale);
         break;
     case GAMEOVER:
         gameOverScreen->Draw(window->CenterX(), window->CenterY(), LAYER_MENU);
-        restartButton->Draw(window->CenterX(), window->CenterY() + 200, LAYER_BUTTON, restartScale);
+        restartButton->Draw(window->CenterX() - 320.f, window->CenterY() + 200.f, LAYER_BUTTON, restartScale);
+        quitButton->Draw(window->CenterX() + 320.f, window->CenterY() + 200.f, LAYER_BUTTON, quitScale);
         break;
     case PLAYING:
     default:

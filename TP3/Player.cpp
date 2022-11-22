@@ -74,6 +74,7 @@ void Player::Update()
     if (hp == 0)
     {
         GeoWars::state = GAMEOVER;
+        GeoWars::audio->Play(SGAMEOVER);
         return;
     }
 
