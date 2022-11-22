@@ -26,7 +26,7 @@ void GeoWars::Init()
     audio->Add(FIRE, "Resources/audio/laser.wav");
     audio->Add(ENEMYFIRE, "Resources/audio/laser2.wav");
     audio->Add(ENEMYSPAWN, "Resources/audio/spawn.wav");
-    audio->Add(HITWALL, "Resources/Hitwall.wav");
+    audio->Add(HITWALL, "Resources/audio/laserdot.wav");
     audio->Add(EXPLODE, "Resources/audio/radioactivity.wav");
     audio->Add(SGAMEOVER, "Resources/audio/gameover.wav");
 
@@ -319,7 +319,6 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     engine->window->Color(0, 0, 0);
     engine->window->Title("GeoWars");
     engine->window->Icon(IDI_ICON);
-    engine->window->Cursor(IDC_CURSOR);
     engine->window->HideCursor(true);
 
     Game *game = new GeoWars();

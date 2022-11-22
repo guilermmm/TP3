@@ -13,6 +13,7 @@ class Hud : public Object
     Animation *hpBar[5] = {nullptr};
     Font *font = nullptr;
     std::stringstream text;
+    std::stringstream text2;
 
   public:
     Hud();

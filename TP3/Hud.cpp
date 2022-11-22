@@ -40,6 +40,9 @@ void Hud::Draw()
         break;
     case GAMEOVER:
         text.str("");
+        text << "GAME OVER";
+        font->Draw(860, 500, text.str(), { 0.7f, 0.7f, 0.7f, 1.0f }, 0.0f, 5.0f);
+        text.str("");
         text << "Score: " << GeoWars::EnemyCount();
         font->Draw(920, 960, text.str(), {0.7f, 0.7f, 0.7f, 1.0f}, 0.0f, 3.0f);
         break;
