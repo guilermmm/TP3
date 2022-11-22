@@ -10,14 +10,14 @@ Kamikaze::Kamikaze(Image *img, float pX, float pY) : player(GeoWars::player)
     sprite = new Sprite(img);
     maxSpeed = randSpeed.Rand();
     speed = new Vector(0, maxSpeed);
-    BBox(new Circle(18.0f));
+    BBox(new Circle(24.0f));
 
     RandF posX{300, 400};
     RandF posY{game->Height() - 400, game->Height() - 300};
     MoveTo(pX, pY);
 
     Generator emitter;
-    emitter.imgFile = "Resources/Spark.png";
+    emitter.imgFile = "Resources/WIP/Particle.png";
     emitter.angle = 270.0f;
     emitter.spread = 50;
     emitter.lifetime = .2f;
@@ -76,16 +76,16 @@ void Kamikaze::Update()
 
     Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
 
-    if (x < 20)
-        MoveTo(20, y);
-    if (y < 20)
-        MoveTo(x, 20);
-    if (x > game->Width() - 20)
-        MoveTo(game->Width() - 20, y);
-    if (y > game->Height() - 20)
-        MoveTo(x, game->Height() - 20);
+    if (x < 24)
+        MoveTo(24, y);
+    if (y < 24)
+        MoveTo(x, 24);
+    if (x > game->Width() - 24)
+        MoveTo(game->Width() - 24, y);
+    if (y > game->Height() - 24)
+        MoveTo(x, game->Height() - 24);
 
-    Vector butt(speed->Angle() + 180, 20.0f);
+    Vector butt(speed->Angle() + 180, 30.0f);
 
     tail->Config().angle = speed->Angle() + 180;
     tail->Generate(x + butt.XComponent(), y - butt.YComponent());
@@ -109,7 +109,7 @@ void Kamikaze::OnCollision(Object *obj)
         Point self = Point(x, y);
         Point other = Point(obj->X(), obj->Y());
 
-        Vector vec = Vector(Line::Angle(other, self), (36.f - Point::Distance(self, other)));
+        Vector vec = Vector(Line::Angle(other, self), (48.f - Point::Distance(self, other)));
 
         Translate(vec.XComponent() * 5.f * gameTime, -vec.YComponent() * 5.f * gameTime);
     }

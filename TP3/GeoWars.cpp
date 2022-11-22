@@ -1,16 +1,13 @@
 #include "GeoWars.h"
-#include "Delay.h"
 #include "EnemyShip.h"
 #include "Engine.h"
-#include "Mothership.h"
 #include "Kamikaze.h"
-#include "Orange.h"
+#include "Mothership.h"
 #include "Resources.h"
 
 Player *GeoWars::player = nullptr;
 Audio *GeoWars::audio = nullptr;
 Scene *GeoWars::scene = nullptr;
-bool GeoWars::viewHUD = false;
 Controller *GeoWars::gamepad = nullptr;
 bool GeoWars::gamepadOn = false;
 uint GeoWars::xboxPlayer = PLAYER1;
@@ -32,7 +29,6 @@ void GeoWars::Init()
     audio->Add(HITWALL, "Resources/Hitwall.wav");
     audio->Add(EXPLODE, "Resources/audio/radioactivity.wav");
     audio->Add(SGAMEOVER, "Resources/audio/gameover.wav");
-    audio->Add(START, "Resources/Start.wav");
 
     audio->Volume(FIRE, 0.1f);
     audio->Volume(ENEMYFIRE, 0.2f);
@@ -78,10 +74,10 @@ void GeoWars::Setup()
     secondCtrl = true;
     thirdCtrl = true;
 
-    enemyCount = 25;
+    enemyCount = 0;
 
-    posX = RandF{ 0, game->Width() };
-    posY = RandF{ 0, game->Height() };
+    posX = RandF{0, game->Width()};
+    posY = RandF{0, game->Height()};
 
     /*scene->Add(new Mothership(motherShipImg, player), MOVING);
     scene->Add(new EnemyShip(enemyShipImg, player), MOVING);*/
@@ -179,9 +175,6 @@ void GeoWars::Update()
         if (window->KeyPress('B'))
             viewBBox = !viewBBox;
 
-        if (window->KeyPress('H'))
-            viewHUD = !viewHUD;
-
         viewport.left = player->X() - window->CenterX();
         viewport.right = player->X() + window->CenterX();
         viewport.top = player->Y() - window->CenterY();
@@ -213,11 +206,11 @@ void GeoWars::Update()
     }
     }
 
-    if (enemyCount == 5)
+    if (enemyCount >= 5)
         wave = SECOND;
-    if (enemyCount == 16)
+    if (enemyCount >= 16)
         wave = THIRD;
-    if (enemyCount == 26)
+    if (enemyCount >= 26)
         wave = NONSTOP;
 
     switch (wave)
@@ -228,7 +221,7 @@ void GeoWars::Update()
             firstCtrl = false;
             for (int i = 0; i < 5; i++)
             {
-                scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
+                scene->Add(new Kamikaze(kamikazeImg, player->X() + (i % 2 ? 800.f : -800.f), posY.Rand()), MOVING);
             }
         }
         break;
@@ -238,7 +231,7 @@ void GeoWars::Update()
             secondCtrl = false;
             for (int i = 0; i < 10; i++)
             {
-                scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
+                scene->Add(new Kamikaze(kamikazeImg, player->X() + (i % 2 ? 800.f : -800.f), posY.Rand()), MOVING);
             }
             scene->Add(new EnemyShip(enemyShipImg, player), MOVING);
         }
@@ -249,7 +242,7 @@ void GeoWars::Update()
             thirdCtrl = false;
             for (int i = 0; i < 5; i++)
             {
-                scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
+                scene->Add(new Kamikaze(kamikazeImg, player->X() + (i % 2 ? 800.f : -800.f), posY.Rand()), MOVING);
             }
             for (int i = 0; i < 2; i++)
             {
@@ -259,11 +252,6 @@ void GeoWars::Update()
         }
         break;
     case NONSTOP:
-        if (kamikazeCd.Ready())
-        {
-            kamikazeCd.Restart();
-            scene->Add(new Kamikaze(kamikazeImg, posX.Rand(), posY.Rand()), MOVING);
-        }
         if (shipCd.Ready())
         {
             shipCd.Restart();
@@ -278,6 +266,8 @@ void GeoWars::Update()
     default:
         break;
     }
+
+    hud->Update();
 
     kamikazeCd.Update(gameTime);
     shipCd.Update(gameTime);
@@ -297,14 +287,14 @@ void GeoWars::Draw()
         gameOverScreen->Draw(window->CenterX(), window->CenterY(), LAYER_MENU);
         restartButton->Draw(window->CenterX() - 320.f, window->CenterY() + 200.f, LAYER_BUTTON, restartScale);
         quitButton->Draw(window->CenterX() + 320.f, window->CenterY() + 200.f, LAYER_BUTTON, quitScale);
+        hud->Draw();
         break;
     case PLAYING:
     default:
         backg->Draw(viewport);
         scene->Draw();
 
-        if (viewHUD)
-            hud->Draw();
+        hud->Draw();
 
         if (viewBBox)
             scene->DrawBBox();

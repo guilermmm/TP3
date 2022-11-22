@@ -1,41 +1,30 @@
 #ifndef _GEOWARS_ENEMY_MISSILE_H_
 #define _GEOWARS_ENEMY_MISSILE_H_
 
-#include "Object.h"
+#include "Animation.h"
 #include "EnemyShip.h"
-#include "Sprite.h"
+#include "Object.h"
 #include "Vector.h"
 
 class EnemyMissile : public Object
 {
-private:
+  private:
     const float MaxDistance = 4406;
     const float BaseVolume = 0.8f;
 
-    EnemyShip* enemy;
-    Sprite* sprite;
+    EnemyShip *enemy;
+    Animation *anim;
     Vector speed;
     static Player *&player;
 
-public:
-    EnemyMissile(EnemyShip* enemy);
+  public:
+    EnemyMissile(EnemyShip *enemy, TileSet *tileSet);
     ~EnemyMissile();
 
-    Vector& Speed();
     void Update();
     void Draw();
 
-    void OnCollision(Object* obj);
+    void OnCollision(Object *obj);
 };
-
-inline Vector& EnemyMissile::Speed()
-{
-    return speed;
-}
-
-inline void EnemyMissile::Draw()
-{
-    sprite->Draw(x, y, Layer::UPPER, scale, rotation);
-}
 
 #endif

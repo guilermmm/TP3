@@ -25,7 +25,6 @@ enum SoundIds
 {
     MENU,
     THEME,
-    START,
     FIRE,
     EXPLODE,
     HITWALL,

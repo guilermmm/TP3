@@ -11,7 +11,7 @@ Missile::Missile(TileSet *tileSet)
 {
     anim = new Animation(tileSet, 0.2f, true);
 
-    BBox(new Circle(8));
+    BBox(new Circle(12.f));
 
     speed.RotateTo(player->WeaponAngle());
     speed.ScaleTo(15.0f);

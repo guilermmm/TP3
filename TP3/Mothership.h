@@ -14,10 +14,10 @@ class Mothership : public Entity
     Image *kamikazeImg;
     Vector *speed;
     Player *player;
-    Cooldown spawnCd{2.0f};
-    Particles* tailLeft;
-    Particles* tailMiddle;
-    Particles* tailRight;
+    Cooldown spawnCd{3.0f};
+    Particles *tailLeft;
+    Particles *tailMiddle;
+    Particles *tailRight;
     int distance;
 
   public:

@@ -12,11 +12,11 @@ Player::Player()
 
     speed = new Vector(90.0f, 0.0f);
     weaponAngle = 90.0f;
-    BBox(new Circle(18.0f));
+    BBox(new Circle(36.f));
     MoveTo(game->CenterX(), game->CenterY());
 
     Generator emitter;
-    emitter.imgFile = "Resources/Spark.png";
+    emitter.imgFile = "Resources/WIP/Particle.png";
     emitter.angle = 270.0f;
     emitter.spread = 50;
     emitter.lifetime = .5f;
@@ -32,7 +32,7 @@ Player::Player()
     tailLeft = new Particles(emitter);
     tailRight = new Particles(emitter);
 
-    hp = 3;
+    hp = 5;
 
     type = PLAYER;
 }
@@ -149,7 +149,7 @@ void Player::Update()
 
     Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
 
-    Vector tail(speed->Angle() + 160.0f, 30.0f);
+    Vector tail(speed->Angle() + 160.0f, 56.0f);
 
     tailLeft->Config().angle = speed->Angle() + 180;
     tailLeft->Generate(x + tail.XComponent(), y - tail.YComponent());
@@ -163,14 +163,14 @@ void Player::Update()
 
     fireRate.Update(gameTime);
 
-    if (x < 18)
-        MoveTo(18, y);
-    if (y < 18)
-        MoveTo(x, 18);
-    if (x > game->Width() - 18)
-        MoveTo(game->Width() - 18, y);
-    if (y > game->Height() - 18)
-        MoveTo(x, game->Height() - 18);
+    if (x < 36.f)
+        MoveTo(36.f, y);
+    if (y < 36.f)
+        MoveTo(x, 36.f);
+    if (x > game->Width() - 36.f)
+        MoveTo(game->Width() - 36.f, y);
+    if (y > game->Height() - 36.f)
+        MoveTo(x, game->Height() - 36.f);
 
     dmgCd.Update(gameTime);
 }

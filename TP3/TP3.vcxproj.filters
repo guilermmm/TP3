@@ -114,9 +114,6 @@
     <ClCompile Include="Random.cpp">
       <Filter>Engine\Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="Orange.cpp">
-      <Filter>Game\Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="Cooldown.cpp">
       <Filter>Game\Arquivos de Origem</Filter>
     </ClCompile>
@@ -221,9 +218,6 @@
     <ClInclude Include="GeoWars.h">
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="Delay.h">
-      <Filter>Game\Arquivos de Cabeçalho</Filter>
-    </ClInclude>
     <ClInclude Include="Hud.h">
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
@@ -232,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>Engine\Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="Orange.h">
-      <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Game\Arquivos de Cabeçalho</Filter>

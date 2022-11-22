@@ -8,22 +8,26 @@
 EnemyShip::EnemyShip(Image *img, Player *p) : player(p)
 {
     sprite = new Sprite(img);
-    speed = new Vector(0, 2.0f);
-    BBox(new Circle(20.0f));
+    missileTileSet = new TileSet("Resources/WIP/EnemyMissile.png", 1, 2);
 
-    RandF posX{300, game->Width() - 300};
-    RandF posY{300, game->Height() - 300};
-    MoveTo(posX.Rand(), posY.Rand());
+    speed = new Vector(0, 2.0f);
+    BBox(new Circle(32.0f));
+
+    MoveTo(player->X(), player->Y());
+    RandF ang{0, 360};
+    RandF mag{400, 800};
+    Vector v = Vector(ang.Rand(), mag.Rand());
+    Translate(v.XComponent(), v.YComponent());
 
     Generator emitter;
-    emitter.imgFile = "Resources/Spark.png";
+    emitter.imgFile = "Resources/WIP/Particle.png";
     emitter.angle = 270.0f;
     emitter.spread = 50;
     emitter.lifetime = .2f;
     emitter.frequency = .005f;
     emitter.percentToDim = .1f;
-    emitter.minSpeed = 25.f;
-    emitter.maxSpeed = 40.f;
+    emitter.minSpeed = 5.f;
+    emitter.maxSpeed = 15.f;
     emitter.color.r = .5f;
     emitter.color.g = .1f;
     emitter.color.b = .5f;
@@ -42,6 +46,7 @@ EnemyShip::~EnemyShip()
 {
     delete sprite;
     delete speed;
+    GeoWars::IncrementEnemyCount();
 }
 
 bool EnemyShip::TakeDamage(uint damage)
@@ -77,16 +82,16 @@ void EnemyShip::Update()
 
     RotateTo(90.f - Line::Angle(Point(x, y), Point(player->X(), player->Y())));
 
-    if (x < 20)
-        MoveTo(20, y);
-    if (y < 20)
-        MoveTo(x, 20);
-    if (x > game->Width() - 20)
-        MoveTo(game->Width() - 20, y);
-    if (y > game->Height() - 20)
-        MoveTo(x, game->Height() - 20);
+    if (x < 32.f)
+        MoveTo(32.f, y);
+    if (y < 32.f)
+        MoveTo(x, 32.f);
+    if (x > game->Width() - 32.f)
+        MoveTo(game->Width() - 32.f, y);
+    if (y > game->Height() - 32.f)
+        MoveTo(x, game->Height() - 32.f);
 
-    Vector butt(Line::Angle(Point(x, y), Point(player->X(), player->Y())) + 180, 20.0f);
+    Vector butt(Line::Angle(Point(x, y), Point(player->X(), player->Y())) + 180, 32.0f);
 
     tail->Config().angle = speed->Angle() + 180;
     tail->Generate(x + butt.XComponent(), y - butt.YComponent());
@@ -95,9 +100,8 @@ void EnemyShip::Update()
     if (attackCd.Ready())
     {
         attackCd.Restart();
-        GeoWars::scene->Add(new EnemyMissile(this), STATIC);
+        GeoWars::scene->Add(new EnemyMissile(this, missileTileSet), STATIC);
         GeoWars::audio->Play(ENEMYFIRE);
-
     }
 
     attackCd.Update(gameTime);

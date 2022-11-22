@@ -6,11 +6,11 @@
 
 Player *&EnemyMissile::player = GeoWars::player;
 
-EnemyMissile::EnemyMissile(EnemyShip *enemy)
+EnemyMissile::EnemyMissile(EnemyShip *enemy, TileSet *tileSet)
 {
-    sprite = new Sprite("Resources/Missile.png");
+    anim = new Animation(tileSet, 0.2f, true);
 
-    BBox(new Circle(8));
+    BBox(new Circle(8.f));
 
     speed.RotateTo(Line::Angle(Point(enemy->X(), enemy->Y()), Point(player->X(), player->Y())));
     speed.ScaleTo(15.0f);
@@ -23,7 +23,7 @@ EnemyMissile::EnemyMissile(EnemyShip *enemy)
 
 EnemyMissile::~EnemyMissile()
 {
-    delete sprite;
+    delete anim;
 }
 
 void EnemyMissile::Update()
@@ -36,6 +36,8 @@ void EnemyMissile::Update()
         GeoWars::scene->Add(new WallHit(x, y), STATIC);
         GeoWars::scene->Delete();
     }
+
+    anim->NextFrame();
 }
 
 void EnemyMissile::OnCollision(Object *obj)
@@ -50,4 +52,9 @@ void EnemyMissile::OnCollision(Object *obj)
             GeoWars::scene->Delete(this, STATIC);
         }
     }
+}
+
+void EnemyMissile::Draw()
+{
+    anim->Draw(x, y, Layer::UPPER, scale, rotation);
 }

@@ -38,6 +38,11 @@ class Player : public Entity
         return weaponAngle;
     }
 
+    uint Hp() const
+    {
+        return hp;
+    }
+
     void Move(Vector &&v);
     void Update();
     void Draw();

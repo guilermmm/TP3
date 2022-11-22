@@ -12,12 +12,13 @@ class EnemyShip : public Entity
 {
   private:
     Sprite *sprite;
+    TileSet *missileTileSet;
     Vector *speed;
     Player *player;
-    Particles* tail;
+    Particles *tail;
     float factor;
 
-    RandF cd{ 1.0f,2.0f };
+    RandF cd{1.0f, 2.0f};
 
     Cooldown attackCd{cd.Rand(), false};
 

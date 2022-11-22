@@ -11,7 +11,8 @@
 #include "Scene.h"
 #include "Sprite.h"
 
-enum Wave {
+enum Wave
+{
     FIRST,
     SECOND,
     THIRD,
@@ -24,7 +25,7 @@ class GeoWars : public Game
     Background *backg = nullptr;
     Image *motherShipImg = nullptr;
     Image *enemyShipImg = nullptr;
-    Image* kamikazeImg = nullptr;
+    Image *kamikazeImg = nullptr;
     Hud *hud = nullptr;
     bool viewBBox = false;
 
@@ -45,19 +46,18 @@ class GeoWars : public Game
     bool secondCtrl = true;
     bool thirdCtrl = true;
 
-    Cooldown kamikazeCd{ 0.5f };
-    Cooldown shipCd{ 2.0f };
-    Cooldown motherShipCd{ 3.0f };
+    Cooldown kamikazeCd{1.0f};
+    Cooldown shipCd{4.0f};
+    Cooldown motherShipCd{6.0f};
 
-    RandF posX{ game->Width(), game->Width() };
-    RandF posY{ game->Height(), game->Height() };
+    RandF posX{game->Width(), game->Width()};
+    RandF posY{game->Height(), game->Height()};
 
   public:
     static int enemyCount;
     static Player *player;
     static Audio *audio;
     static Scene *scene;
-    static bool viewHUD;
     static Controller *gamepad;
     static bool gamepadOn;
     static uint xboxPlayer;
@@ -71,9 +71,14 @@ class GeoWars : public Game
     void Draw();
     void Finalize();
 
+    static int EnemyCount();
     static void IncrementEnemyCount();
 };
 
+inline int GeoWars::EnemyCount()
+{
+    return enemyCount;
+}
 
 inline void GeoWars::IncrementEnemyCount()
 {

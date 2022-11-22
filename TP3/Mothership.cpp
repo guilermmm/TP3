@@ -10,25 +10,27 @@ Mothership::Mothership(Image *img, Player *p) : player(p)
     sprite = new Sprite(img);
     kamikazeImg = new Image("Resources/WIP/Kamikaze.png");
     speed = new Vector(0, 2.0f);
-    BBox(new Circle(30.0f));
+    BBox(new Circle(72.0f));
 
     distance = 600;
 
-    RandF posX{200, game->Width() - 200};
-    RandF posY{200, game->Height() - 200 };
-    MoveTo(posX.Rand(), posY.Rand());
+    MoveTo(player->X(), player->Y());
+    RandF ang{0, 360};
+    RandF mag{400, 800};
+    Vector v = Vector(ang.Rand(), mag.Rand());
+    Translate(v.XComponent(), v.YComponent());
 
     spawnCd.Restart();
 
     Generator emitter;
-    emitter.imgFile = "Resources/Spark.png";
+    emitter.imgFile = "Resources/WIP/Particle.png";
     emitter.angle = 270.0f;
     emitter.spread = 50;
     emitter.lifetime = .5f;
     emitter.frequency = .005f;
     emitter.percentToDim = .1f;
-    emitter.minSpeed = 25.f;
-    emitter.maxSpeed = 75.f;
+    emitter.minSpeed = 10.f;
+    emitter.maxSpeed = 40.f;
     emitter.color.r = .1f;
     emitter.color.g = .5f;
     emitter.color.b = .1f;
@@ -38,7 +40,7 @@ Mothership::Mothership(Image *img, Player *p) : player(p)
     tailMiddle = new Particles(emitter);
     tailRight = new Particles(emitter);
 
-    hp = 50;
+    hp = 40;
 
     type = ENEMY;
 }
@@ -47,6 +49,7 @@ Mothership::~Mothership()
 {
     delete sprite;
     delete speed;
+    GeoWars::IncrementEnemyCount();
 }
 
 bool Mothership::TakeDamage(uint damage)
@@ -86,16 +89,16 @@ void Mothership::Update()
 
     Translate(speed->XComponent() * 50.0f * gameTime, -speed->YComponent() * 50.0f * gameTime);
 
-    if (x < 30)
-        MoveTo(30, y);
-    if (y < 30)
-        MoveTo(x, 30);
-    if (x > game->Width() - 30)
-        MoveTo(game->Width() - 30, y);
-    if (y > game->Height() - 30)
-        MoveTo(x, game->Height() - 30);
+    if (x < 72.f)
+        MoveTo(72.f, y);
+    if (y < 72.f)
+        MoveTo(x, 72.f);
+    if (x > game->Width() - 72.f)
+        MoveTo(game->Width() - 72.f, y);
+    if (y > game->Height() - 72.f)
+        MoveTo(x, game->Height() - 72.f);
 
-    Vector tail(speed->Angle() + 140.0f, 50.0f);
+    Vector tail(speed->Angle() + 140.0f, 96.0f);
 
     tailLeft->Config().angle = speed->Angle() + 180;
     tailLeft->Generate(x + tail.XComponent(), y - tail.YComponent());

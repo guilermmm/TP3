@@ -1,88 +1,47 @@
-/**********************************************************************************
-// Hud (Código Fonte)
-//
-// Criação:     02 Ago 2019
-// Atualização: 01 Nov 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Heads Up Display
-//
-**********************************************************************************/
-
 #include "Hud.h"
 #include "GeoWars.h"
-
-// ------------------------------------------------------------------------------
+#include "Util.h"
 
 Hud::Hud()
 {
-    // cria fonte para exibição de texto
-    font = new Font("Resources/Tahoma14.png");
-    font->Spacing("Resources/Tahoma14.dat");
-    bold = new Font("Resources/Tahoma14b.png");
-    bold->Spacing("Resources/Tahoma14b.dat");
+    hpTileSet = new TileSet("Resources/WIP/Hp.png", 1, 2);
+    for (int i = 0; i < 5; i++)
+        hpBar[i] = new Animation(hpTileSet, 0.f, false);
 
-    // carrega sprites
-    infoBox = new Sprite("Resources/InfoBox.png");
-    keyMap = new Sprite("Resources/Keymap.png");
+    font = new Font("Resources/Tahoma14b.png");
+    font->Spacing("Resources/Tahoma14b.dat");
 }
-
-// ------------------------------------------------------------------------------
 
 Hud::~Hud()
 {
     delete font;
-    delete bold;
-    delete infoBox;
-    delete keyMap;
+    delete hpTileSet;
+    for (int i = 0; i < 5; i++)
+        delete hpBar[i];
 }
-
-// -------------------------------------------------------------------------------
 
 void Hud::Update()
 {
-
+    for (int i = 0; i < 5; i++)
+        hpBar[i]->Frame(GeoWars::player->Hp() > i ? 0 : 1);
 }
-
-// -------------------------------------------------------------------------------
 
 void Hud::Draw()
 {
-    // desenha elementos da interface
-    infoBox->Draw(game->viewport.left + 140, game->viewport.top + 100, Layer::FRONT);
-    keyMap->Draw(game->viewport.left + window->CenterX(), game->viewport.top + window->Height() - 16.0f, Layer::FRONT);
+    switch (GeoWars::state)
+    {
+    case PLAYING:
+        for (int i = 0; i < 5; i++)
+            hpBar[i]->Draw(game->viewport.left + 32.f + (i * 32.f), game->viewport.top + 40.f, LAYER_HUD);
 
-    // define cor do texto
-    Color textColor{ 0.7f, 0.7f, 0.7f, 1.0f };
-
-    // desenha texto
-    text.str("");
-    text << "Geometry Wars";
-    bold->Draw(40, 62, text.str(), textColor);
-
-    text.str("");
-    text << "Janela: " << window->Width() << " x " << window->Height();
-    font->Draw(40, 92, text.str(), textColor);
-
-    text.str("");
-    text << "Mundo: " << game->Width() << " x " << game->Height();
-    font->Draw(40, 112, text.str(), textColor);
-
-    text.str("");
-    text << "Viewport: (" << uint(game->viewport.left) << "," << uint(game->viewport.top) << ") a (" << uint(game->viewport.right) << "," << uint(game->viewport.bottom) << ")";
-    font->Draw(40, 132, text.str(), textColor);
-
-    text.str("");
-    text << "Mísseis: " << GeoWars::scene->Size() - 5;
-    font->Draw(40, 152, text.str(), textColor);
-
-    text.str("");
-    text << "Movimento";
-    bold->Draw(window->CenterX() - 84.0f, window->Height() - 7.0f, text.str(), textColor);
-
-    text.str("");
-    text << "Disparo";
-    bold->Draw(window->CenterX() + 115.0f, window->Height() - 7.0f, text.str(), textColor);
+        text.str("");
+        text << "Score: " << GeoWars::EnemyCount();
+        font->Draw(60, 1060, text.str(), {0.7f, 0.7f, 0.7f, 1.0f}, 0.0f, 2.0f);
+        break;
+    case GAMEOVER:
+        text.str("");
+        text << "Score: " << GeoWars::EnemyCount();
+        font->Draw(920, 960, text.str(), {0.7f, 0.7f, 0.7f, 1.0f}, 0.0f, 3.0f);
+        break;
+    }
 }
-
-// -------------------------------------------------------------------------------
