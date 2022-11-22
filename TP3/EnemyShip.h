@@ -22,7 +22,7 @@ class EnemyShip : public Entity
     EnemyShip(Image *img, Player *p);
     ~EnemyShip();
 
-    void TakeDamage(uint damage);
+    bool TakeDamage(uint damage);
 
     void OnCollision(Object *obj);
     void Update();

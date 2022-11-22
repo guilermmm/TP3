@@ -10,7 +10,7 @@ class Entity : public Object
     uint hp;
 
   public:
-    virtual void TakeDamage(uint damage) = 0;
+    virtual bool TakeDamage(uint damage) = 0;
 };
 
 #endif

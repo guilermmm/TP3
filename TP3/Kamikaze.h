@@ -19,7 +19,7 @@ class Kamikaze : public Entity
     Kamikaze(Image *img, float pX, float pY);
     ~Kamikaze();
 
-    void TakeDamage(uint damage);
+    bool TakeDamage(uint damage);
 
     void OnCollision(Object *obj);
     void Update();

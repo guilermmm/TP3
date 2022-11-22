@@ -40,4 +40,14 @@ void EnemyMissile::Update()
 
 void EnemyMissile::OnCollision(Object *obj)
 {
+    if (obj->Type() == PLAYER)
+    {
+        Player *player = (Player *)obj;
+        if (player->TakeDamage(1))
+        {
+            GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+            GeoWars::scene->Add(new WallHit(x, y), STATIC);
+            GeoWars::scene->Delete();
+        }
+    }
 }

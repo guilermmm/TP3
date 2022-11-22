@@ -26,12 +26,14 @@ Kamikaze::~Kamikaze()
     delete speed;
 }
 
-void Kamikaze::TakeDamage(uint damage)
+bool Kamikaze::TakeDamage(uint damage)
 {
     if (hp > damage)
         hp -= damage;
     else
         hp = 0;
+
+    return true;
 }
 
 void Kamikaze::Update()
@@ -83,6 +85,16 @@ void Kamikaze::OnCollision(Object *obj)
         Vector vec = Vector(Line::Angle(other, self), (36.f - Point::Distance(self, other)));
 
         Translate(vec.XComponent() * 5.f * gameTime, -vec.YComponent() * 5.f * gameTime);
+    }
+    break;
+    case PLAYER: {
+        Player *player = (Player *)obj;
+        if (player->TakeDamage(1))
+        {
+            GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+            GeoWars::scene->Add(new Explosion(x, y), STATIC);
+            GeoWars::scene->Delete(this, MOVING);
+        }
     }
     break;
     }

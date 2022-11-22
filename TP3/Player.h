@@ -4,12 +4,12 @@
 #include "Animation.h"
 #include "Controller.h"
 #include "Cooldown.h"
-#include "Object.h"
+#include "Entity.h"
 #include "Particles.h"
 #include "Sprite.h"
 #include "Vector.h"
 
-class Player : public Object
+class Player : public Entity
 {
   private:
     Sprite *sprite;
@@ -20,10 +20,13 @@ class Player : public Object
     Vector *speed;
     float weaponAngle;
     Cooldown fireRate = {0.2f};
+    Cooldown dmgCd = {0.5f};
 
   public:
     Player();
     ~Player();
+
+    bool TakeDamage(uint damage);
 
     Vector *Speed() const
     {

@@ -14,7 +14,6 @@ Player::Player()
     weaponAngle = 90.0f;
     BBox(new Circle(18.0f));
     MoveTo(game->CenterX(), game->CenterY());
-    type = PLAYER;
 
     Generator emitter;
     emitter.imgFile = "Resources/Spark.png";
@@ -32,6 +31,10 @@ Player::Player()
 
     tailLeft = new Particles(emitter);
     tailRight = new Particles(emitter);
+
+    hp = 3;
+
+    type = PLAYER;
 }
 
 Player::~Player()
@@ -40,6 +43,20 @@ Player::~Player()
     delete basicWeapon;
     delete tailLeft;
     delete tailRight;
+}
+
+bool Player::TakeDamage(uint damage)
+{
+    if (dmgCd.Down())
+        return false;
+
+    if (hp > damage)
+        hp -= damage;
+    else
+        hp = 0;
+
+    dmgCd.Restart();
+    return true;
 }
 
 void Player::Move(Vector &&v)
@@ -140,14 +157,16 @@ void Player::Update()
 
     fireRate.Update(gameTime);
 
-    if (x < 50)
-        MoveTo(50, y);
-    if (y < 50)
-        MoveTo(x, 50);
-    if (x > game->Width() - 50)
-        MoveTo(game->Width() - 50, y);
-    if (y > game->Height() - 50)
-        MoveTo(x, game->Height() - 50);
+    if (x < 18)
+        MoveTo(18, y);
+    if (y < 18)
+        MoveTo(x, 18);
+    if (x > game->Width() - 18)
+        MoveTo(game->Width() - 18, y);
+    if (y > game->Height() - 18)
+        MoveTo(x, game->Height() - 18);
+
+    dmgCd.Update(gameTime);
 }
 
 void Player::Draw()

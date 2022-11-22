@@ -28,12 +28,14 @@ EnemyShip::~EnemyShip()
     delete speed;
 }
 
-void EnemyShip::TakeDamage(uint damage)
+bool EnemyShip::TakeDamage(uint damage)
 {
     if (hp > damage)
         hp -= damage;
     else
         hp = 0;
+
+    return true;
 }
 
 void EnemyShip::Update()
@@ -51,14 +53,14 @@ void EnemyShip::Update()
 
     RotateTo(90.f - Line::Angle(Point(x, y), Point(player->X(), player->Y())));
 
-    if (x < 0)
-        MoveTo(0, y);
-    if (y < 0)
-        MoveTo(x, 0);
-    if (x > game->Width() - 0)
-        MoveTo(game->Width() - 0, y);
-    if (y > game->Height() - 0)
-        MoveTo(x, game->Height() - 0);
+    if (x < 20)
+        MoveTo(20, y);
+    if (y < 20)
+        MoveTo(x, 20);
+    if (x > game->Width() - 20)
+        MoveTo(game->Width() - 20, y);
+    if (y > game->Height() - 20)
+        MoveTo(x, game->Height() - 20);
 
     if (attackCd.Ready())
     {
@@ -85,9 +87,12 @@ void EnemyShip::OnCollision(Object *obj)
     }
     break;
     case PLAYER: {
-        GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
-        GeoWars::scene->Add(new Explosion(this->x, this->y), STATIC);
-        GeoWars::scene->Delete(this, MOVING);
+        Player *player = (Player *)obj;
+        if (player->TakeDamage(1))
+        {
+            GeoWars::audio->Play(HITWALL, VolumeFromDistance(Point(x, y), Point(player->X(), player->Y())));
+            GeoWars::scene->Add(new Explosion(x, y), STATIC);
+        }
     }
     break;
     case ENEMY: {

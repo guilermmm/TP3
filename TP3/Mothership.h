@@ -21,7 +21,7 @@ class Mothership : public Entity
     Mothership(Image *img, Player *p);
     ~Mothership();
 
-    void TakeDamage(uint damage);
+    bool TakeDamage(uint damage);
 
     void OnCollision(Object *obj);
     void Update();
